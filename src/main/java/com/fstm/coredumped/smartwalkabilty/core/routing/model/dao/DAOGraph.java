@@ -42,7 +42,7 @@ public class DAOGraph implements IDAOGraph {
         try
         {
             Connection c = Connexion.getConnection();
-            PreparedStatement preparedStatement = c.prepareStatement("select gid as id, source, target, length_m, x1, y1, x2, y2, risk FROM ways WHERE st_contains((\n" +
+            PreparedStatement preparedStatement = c.prepareStatement("select gid as id, source, target, length_m, x1, y1, x2, y2 FROM ways WHERE st_contains((\n" +
                     "SELECT ST_BUFFER (\n" +
                     "\tST_SetSRID(ST_Point(?, ?),?)\n" +
                     "\t, ?, ?\n" +
@@ -65,7 +65,8 @@ public class DAOGraph implements IDAOGraph {
                 v.setDepart(new GeoPoint(resultSet.getInt("source"), resultSet.getDouble("y1"), resultSet.getDouble("x1")));
                 v.setArrive(new GeoPoint(resultSet.getInt("target"), resultSet.getDouble("y2"), resultSet.getDouble("x2")));
                 v.setDistance(resultSet.getDouble("length_m"));
-                v.setRisk(resultSet.getInt("risk"));
+                v.setRisk(0);
+                //v.setRisk(resultSet.getInt("risk"));
                 graph.Add_Route(v);
             }
 

@@ -11,13 +11,16 @@ import java.text.SimpleDateFormat;
 
 public class AnnonceBlob {
     private int id;
-    private String dateDebut, dateFin, Titre, Description, url, Token;
+    private String  Description, url, Token;
     private int[] sites;
     private String[] url_optionnel;
     private int id_cat;
 
+
+
+
     public boolean verifyInfos() {
-        if (dateDebut == null || dateFin == null || Titre == null || Description == null || url == null || Token == null|| id_cat==0 || sites == null)
+        if ( Description == null || url == null || Token == null|| id_cat==0 || sites == null )
             return false;
         if (sites.length == 0) return false;
         return true;
@@ -31,29 +34,6 @@ public class AnnonceBlob {
         this.id = id;
     }
 
-    public String getDateDebut() {
-        return dateDebut;
-    }
-
-    public void setDateDebut(String dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public String getDateFin() {
-        return dateFin;
-    }
-
-    public void setDateFin(String dateFin) {
-        this.dateFin = dateFin;
-    }
-
-    public String getTitre() {
-        return Titre;
-    }
-
-    public void setTitre(String titre) {
-        Titre = titre;
-    }
 
     public String getDescription() {
         return Description;
@@ -105,12 +85,11 @@ public class AnnonceBlob {
 
     public void FillAnnonceFromBlob(Annonce annonce) throws ParseException {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        annonce.setDateDebut(dateFormat.parse(dateDebut));
-        annonce.setDateFin(dateFormat.parse(dateFin));
-        annonce.setTitre(Titre);
+
         annonce.setDescription(Description);
         annonce.setUrlPrincipalImage(url);
         annonce.setCategorie(DAOCategorie.getDaoCategorie().getById(id_cat));
+
         for (int st : sites) {
             Site site = new Site();
             site.setId(st);

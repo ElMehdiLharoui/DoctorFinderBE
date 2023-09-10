@@ -4,7 +4,7 @@ import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
 
 import java.io.Serializable;
 
-public abstract class RequestPerimetre extends Request implements Serializable {
+public abstract class RequestPerimetre extends Request {
     private final double perimetre;
 
     public RequestPerimetre(double perimetre, GeoPoint actualPoint) {

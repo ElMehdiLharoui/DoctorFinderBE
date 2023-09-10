@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
+
 public class Categorie implements Serializable {
     private int id;
     private String categorie;
@@ -11,10 +12,12 @@ public class Categorie implements Serializable {
 
     public Categorie() {
     }
+
     public Categorie(int id, String categorie) {
         this.id = id;
         this.categorie = categorie;
     }
+
     public int getId() {
         return id;
     }

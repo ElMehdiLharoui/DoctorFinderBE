@@ -100,7 +100,7 @@ public class DAODanger {
         try {
 
             Connection c = Connexion.getConnection();
-            PreparedStatement preparedStatement = c.prepareStatement("select t.name, w.x1, w.y1, w.x2, w.y2, w.length_m, w.risk, d.date, d.degree\n" +
+            PreparedStatement preparedStatement = c.prepareStatement("select t.name, w.x1, w.y1, w.x2, w.y2, w.length_m, d.date, d.degree\n" +
                     "FROM dangertype t \n" +
                     "JOIN declaration d on d.id_type = t.id_type \n" +
                     "JOIN ways w on d.id_way = w.gid \n" +
@@ -136,7 +136,8 @@ public class DAODanger {
                             new GeoPoint(resultSet.getDouble("y2"), resultSet.getDouble("x2")),
                             resultSet.getDouble("length_m")
                     );
-                    vertex.setRisk(resultSet.getDouble("risk"));
+                    vertex.setRisk(0);
+                    //vertex.setRisk(resultSet.getDouble("risk"));
 
                     declarations.add(new Declaration(danger, vertex, resultSet.getTimestamp("date")));
                 }

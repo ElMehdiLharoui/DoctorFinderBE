@@ -25,9 +25,15 @@ public class SiteController extends HttpServlet {
         Gson s = new Gson();
         try {
             IdsSiteBlob Blob=s.fromJson(request.getReader(), IdsSiteBlob.class);
-            String s1=service.getServ(Blob);
-            if(s1.contains("invalid"))response.setStatus(400);
-            response.getWriter().println(s1);
+            if(Blob == null) {
+                super.doOptions(request, response);
+            }
+            else
+            {
+                String s1=service.getServ(Blob);
+                if(s1.contains("invalid"))response.setStatus(400);
+                response.getWriter().println(s1);
+            }
         }
         catch (Exception e)
         {
@@ -40,7 +46,6 @@ public class SiteController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         resp.setContentType("application/json");
         Gson s = new Gson();
         try {

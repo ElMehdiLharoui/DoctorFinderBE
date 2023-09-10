@@ -25,12 +25,18 @@ public class DAOSite implements IDAO<Site>{
         try {
             Connexion.getCon().setAutoCommit(false);
 
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("INSERT INTO site (name ,datecreated,id_organisation,location) VALUES (?,?,?,point(?,?)) ", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("INSERT INTO site (name ,datecreated,id_organisation,location,address,dureeviste,maxpatient,heuredebut,heurefin,weekday) VALUES (?,?,?,point(?,?),?,?,?,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, obj.getName());
             preparedStatement.setDate(2, new Date(obj.getDateCreated().getTime()));
             preparedStatement.setInt(3,obj.getOrganisation().getId());
             preparedStatement.setDouble(4,obj.getLocalisation().getLaltittude());
             preparedStatement.setDouble(5,obj.getLocalisation().getLongtitude());
+            preparedStatement.setString(6,obj.getAdress());
+            preparedStatement.setInt(7,obj.getDureeviste());
+            preparedStatement.setInt(8,obj.getMaxpatient());
+            preparedStatement.setString(9,obj.getHeuredebut());
+            preparedStatement.setString(10,obj.getHeurefin());
+            preparedStatement.setString(11,obj.getWeekday());
             preparedStatement.executeUpdate();
             ResultSet set= preparedStatement.getGeneratedKeys();
 
@@ -124,7 +130,8 @@ public class DAOSite implements IDAO<Site>{
             if(set.next())
             {
                 site=extractSite(set);
-                DAOAnnonce.getDAOAnnonce().extractSiteActiveAnnonces_Categorie(site,cats);
+                if(cats.size() == 0)  DAOAnnonce.getDAOAnnonce().extractSiteAnnonces(site);
+                else DAOAnnonce.getDAOAnnonce().extractSiteAnnonces_Categorie(site,cats);
                 organisation=DAOOrganisation.getDaoOrganisation().findOrganisationById(set.getInt("id_organisation"));
                 site.setOrganisation(organisation);
             }
@@ -162,8 +169,13 @@ public class DAOSite implements IDAO<Site>{
            GeoPoint geoPoint = new GeoPoint();
            geoPoint.setLaltittude(set.getDouble("lat"));
            geoPoint.setLongtitude(set.getDouble("lng"));
-
            site.setLocalisation(geoPoint);
+           site.setAdress((set.getString("address")));
+           site.setDureeviste(set.getInt("dureeviste"));
+           site.setMaxpatient(set.getInt("maxpatient"));
+           site.setHeuredebut((set.getString("heuredebut")));
+           site.setHeurefin((set.getString("heurefin")));
+           site.setWeekday((set.getString("weekday")));
         return site;
     }
 
@@ -179,13 +191,19 @@ public class DAOSite implements IDAO<Site>{
 
              Connexion.getCon().setAutoCommit(false);
 
-             PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("UPDATE  site SET name =?,datecreated=?,id_organisation=?,location=point(?,?) where id=?");
+             PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("UPDATE  site SET name =?,datecreated=?,id_organisation=?,location=point(?,?),address=? ,dureeviste=?,maxpatient=?,heuredebut=?,heurefin=?,weekday=? where id=?");
              preparedStatement.setString(1, obj.getName());
              preparedStatement.setDate(2, new Date(obj.getDateCreated().getTime()));
              preparedStatement.setInt(3,obj.getOrganisation().getId());
              preparedStatement.setDouble(4,obj.getLocalisation().getLaltittude());
              preparedStatement.setDouble(5,obj.getLocalisation().getLongtitude());
              preparedStatement.setInt(6,obj.getId());
+             preparedStatement.setString(7,obj.getAdress());
+             preparedStatement.setInt(8,obj.getDureeviste());
+             preparedStatement.setInt(9,obj.getMaxpatient());
+             preparedStatement.setString(10,obj.getHeuredebut());
+             preparedStatement.setString(11,obj.getHeurefin());
+             preparedStatement.setString(12,obj.getWeekday());
              preparedStatement.executeUpdate();
 
              Connexion.getCon().commit();
@@ -265,5 +283,25 @@ public class DAOSite implements IDAO<Site>{
         }
         return false;
     }
+    public int getDureeVisiteBySiteId(int siteId) {
+        int dureeVisite = 0;
+        try {
+            Connection connection = Connexion.getCon();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT DureViste FROM site WHERE id = ?");
+            preparedStatement.setInt(1, siteId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                dureeVisite = resultSet.getInt("DureViste");
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dureeVisite;
+    }
+
 
 }

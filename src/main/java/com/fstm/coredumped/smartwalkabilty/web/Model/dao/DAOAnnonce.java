@@ -22,7 +22,7 @@ public class DAOAnnonce implements IDAO<Annonce>{
     {
         try {
             Connexion.getCon().setAutoCommit(false);
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("INSERT INTO Annonces (datedebut,datefin,titre,urlimageprincipale,description,id_cat) VALUES (?,?,?,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("INSERT INTO Annonces (urlimageprincipale,description,id_cat) VALUES (?,?,?) ", Statement.RETURN_GENERATED_KEYS);
             fillStatement(obj, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet set= preparedStatement.getGeneratedKeys();
@@ -91,9 +91,8 @@ public class DAOAnnonce implements IDAO<Annonce>{
         annonce.setId(set.getInt("id"));
         annonce.setDescription(set.getString("description"));
         annonce.setUrlPrincipalImage(set.getString("urlimageprincipale"));
-        annonce.setTitre(set.getString("titre"));
-        annonce.setDateDebut(set.getDate("datedebut"));
-        annonce.setDateFin(set.getDate("datefin"));
+
+
         annonce.setCategorie(DAOCategorie.getDaoCategorie().getById(set.getInt("id_cat")));
         return annonce;
     }
@@ -103,9 +102,9 @@ public class DAOAnnonce implements IDAO<Annonce>{
     {
         try {
             Connexion.getCon().setAutoCommit(false);
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("UPDATE  annonces SET datedebut=?,datefin=?,titre=?,urlimageprincipale=?,description=?,id_cat=? where id=?");
+            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("UPDATE  annonces SET urlimageprincipale=?,description=?,id_cat=?, where id=?");
             fillStatement(obj, preparedStatement);
-            preparedStatement.setInt(7,obj.getId());
+            preparedStatement.setInt(4,obj.getId());
             preparedStatement.executeUpdate();
             DAOImage.getDAOImage().clearImages(obj);
             for (Image img: obj.getSubImgs())
@@ -132,12 +131,11 @@ public class DAOAnnonce implements IDAO<Annonce>{
     }
 
     private void fillStatement(Annonce obj, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setDate(1, new Date(obj.getDateDebut().getTime()));
-        preparedStatement.setDate(2, new Date(obj.getDateFin().getTime()));
-        preparedStatement.setString(3,obj.getTitre());
-        preparedStatement.setString(4,obj.getUrlPrincipalImage());
-        preparedStatement.setString(5,obj.getDescription());
-        preparedStatement.setInt(6,obj.getCategorie().getId());
+
+        preparedStatement.setString(1,obj.getUrlPrincipalImage());
+        preparedStatement.setString(2,obj.getDescription());
+        preparedStatement.setInt(3,obj.getCategorie().getId());
+
     }
 
     @Override
@@ -233,6 +231,19 @@ public class DAOAnnonce implements IDAO<Annonce>{
             site.AddAnnonce(extractAnnonce(set));
         }
     }
+
+    public void extractSiteAnnonces_Categorie(Site site,List<Integer> catIds) throws SQLException
+    {
+        PreparedStatement statement=Connexion.getCon().prepareStatement("SELECT a.* FROM  annonces a JOIN annonces_con_site acs on a.id = acs.id_annonce  where id_site=? and id_cat = any (?)");
+        statement.setInt(1,site.getId());
+        Array array = Connexion.getCon().createArrayOf("bigint",catIds.toArray());
+        statement.setArray(2,array);
+        ResultSet set=statement.executeQuery();
+        while (set.next()){
+            site.AddAnnonce(extractAnnonce(set));
+        }
+    }
+
     public boolean checkExiste(int id) {
         try {
             PreparedStatement sql= null;

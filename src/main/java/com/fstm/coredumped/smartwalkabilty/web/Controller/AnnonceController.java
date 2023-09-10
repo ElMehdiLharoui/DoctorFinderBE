@@ -26,9 +26,15 @@ public class AnnonceController extends HttpServlet
         Gson s = new Gson();
         try {
             IdsBlob Blob=s.fromJson(request.getReader(),IdsBlob.class);
-            String s1= servise.getServ(Blob);
-            if(s1.contains("invalid"))response.setStatus(401);
-            response.getWriter().println(s1);
+            if(Blob == null) {
+                super.doOptions(request, response);
+            }
+            else
+            {
+                String s1= servise.getServ(Blob);
+                if(s1.contains("invalid"))response.setStatus(401);
+                response.getWriter().println(s1);
+            }
         }catch (Exception e)
         {
             System.err.println(e);

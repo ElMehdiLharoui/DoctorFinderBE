@@ -1,5 +1,7 @@
 package com.fstm.coredumped.smartwalkabilty.web.Controller;
 
+import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.LoginResponseDTO;
+import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.organisatioDTO;
 import com.fstm.coredumped.smartwalkabilty.web.Model.Service.JWTgv;
 import com.fstm.coredumped.smartwalkabilty.web.Model.Service.MD5Hash;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Organisation;
@@ -11,10 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class AuthentificationController extends HttpServlet {
     public class LoginBlob {
@@ -28,14 +27,7 @@ public class AuthentificationController extends HttpServlet {
             this.error = errMessage;
         }
     }
-    public class Response{
-        String token;
-        OrganisationBlob organisation;
-        Response(String t, OrganisationBlob org){
-            this.organisation = org;
-            this.token = t;
-        }
-    }
+
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -43,21 +35,7 @@ public class AuthentificationController extends HttpServlet {
         super.service(req, resp);
     }
 
-    public class OrganisationBlob{
-        int id;
-        String name;
-        String datecreated;
-        String login;
-        String email;
 
-        public OrganisationBlob(int id, String name, String datecreated, String login, String email) {
-            this.id = id;
-            this.name = name;
-            this.datecreated = datecreated;
-            this.login = login;
-            this.email = email;
-        }
-    }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -68,20 +46,25 @@ public class AuthentificationController extends HttpServlet {
         String generatedPassword = MD5Hash.MD5Hash(blob.password);
         Organisation organisation = new DAOOrganisation().authentification(blob.login,generatedPassword);
         if (organisation != null) {
-            String token = new JWTgv().generateToken(organisation);
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-            resp.getWriter().println(gson.toJson(new Response( token , new OrganisationBlob(
-                    organisation.getId(),
-                    organisation.getNom(),
-                    formatter.format(organisation.getDateCreation()),
-                    organisation.getLogin(),
-                    organisation.getEmail()
-            ))));
+            LoginResponseDTO dto = generateAndReturnToken(organisation);
+            resp.getWriter().println(gson.toJson(dto));
         }
         else {
             resp.setStatus(400);
             resp.getWriter().println(gson.toJson(new err("Authentication Error : no account found with the provided login/password")));
         }
+    }
+
+    public static LoginResponseDTO generateAndReturnToken(Organisation organisation) throws IOException {
+        String token = new JWTgv().generateToken(organisation);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return new LoginResponseDTO( token , new organisatioDTO(
+                organisation.getId(),
+                organisation.getNom(),
+               // formatter.format(organisation.getDateCreation()),
+                organisation.getLogin(),
+                organisation.getEmail()
+        ));
     }
 
     private void setAccessControlHeaders(HttpServletResponse resp) {

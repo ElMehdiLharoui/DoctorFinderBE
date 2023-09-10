@@ -12,9 +12,62 @@ public class SiteBlob {
     private String name, datecreated, Token;
     private int id_organisation;
     private GeoPoint geoLocation;
+    private String address;
+
+    public String getWeekday() {
+        return weekday;
+    }
+
+    public void setWeekday(String weekday) {
+        this.weekday = weekday;
+    }
+
+    private String weekday;
+    private int dureeviste, maxpatient;
+    private String heuredebut,heurefin;
+    public int getDureeviste() {
+        return dureeviste;
+    }
+
+    public void setDureeviste(int dureeviste) {
+        this.dureeviste = dureeviste;
+    }
+
+    public int getMaxpatient() {
+        return maxpatient;
+    }
+
+    public void setMaxpatient(int maxpatient) {
+        this.maxpatient = maxpatient;
+    }
+
+    public String getHeuredebut() {
+        return heuredebut;
+    }
+
+    public void setHeuredebut(String heuredebut) {
+        this.heuredebut = heuredebut;
+    }
+
+    public String getHeurefin() {
+        return heurefin;
+    }
+
+    public void setHeurefin(String heurefin) {
+        this.heurefin = heurefin;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
 
     public boolean verifyInfos() {
-        if (name == null || datecreated == null || id_organisation == 0 || geoLocation == null || Token == null)
+        if (name == null || datecreated == null || id_organisation == 0 || geoLocation == null || Token == null || address ==null || dureeviste == 0 || maxpatient == 0 || heuredebut == null || heurefin == null  || weekday == null)
             return false;
         return true;
     }
@@ -75,5 +128,11 @@ public class SiteBlob {
         organisation.setId(getId_organisation());
         site.setOrganisation(organisation);
         site.setLocalisation(getGeoLocation());
+        site.setAdress(getAddress());
+        site.setDureeviste(getDureeviste());
+        site.setMaxpatient(getMaxpatient());
+        site.setHeuredebut(getHeuredebut());
+        site.setHeurefin(getHeurefin());
+        site.setWeekday(getWeekday());
     }
 }

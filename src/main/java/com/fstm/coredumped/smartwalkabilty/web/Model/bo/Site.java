@@ -11,15 +11,66 @@ public class Site implements Serializable
 {
     private int id;
     private String Name;
+    private String Address;
     private Date dateCreated;
     private Organisation organisation;
     private GeoPoint localisation;
+    private int dureeviste, maxpatient;
+    private String heuredebut,heurefin;
+    private String weekday;
+    public String getWeekday() {
+        return weekday;
+    }
+
+    public void setWeekday(String weekday) {
+        this.weekday = weekday;
+    }
+
+
+    public int getDureeviste() {
+        return dureeviste;
+    }
+
+    public void setDureeviste(int dureeviste) {
+        this.dureeviste = dureeviste;
+    }
+
+    public int getMaxpatient() {
+        return maxpatient;
+    }
+
+    public void setMaxpatient(int maxpatient) {
+        this.maxpatient = maxpatient;
+    }
+
+    public String getHeuredebut() {
+        return heuredebut;
+    }
+
+    public void setHeuredebut(String heuredebut) {
+        this.heuredebut = heuredebut;
+    }
+
+    public String getHeurefin() {
+        return heurefin;
+    }
+
+    public void setHeurefin(String heurefin) {
+        this.heurefin = heurefin;
+    }
+
+    public String getAdress() {
+        return Address;
+    }
+
+    public void setAdress(String address) {
+        Address = address;
+    }
+    private List<Annonce> annonces = new LinkedList<Annonce>();
 
     public List<Annonce> getAnnonces() {
         return annonces;
     }
-
-    private List<Annonce> annonces = new LinkedList<Annonce>();
 
     public Organisation getOrganisation() {
         return organisation;

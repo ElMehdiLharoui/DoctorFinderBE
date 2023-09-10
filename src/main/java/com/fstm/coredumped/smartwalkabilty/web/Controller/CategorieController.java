@@ -19,14 +19,20 @@ public class CategorieController extends HttpServlet
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        response.setContentType("application/json");
+        Gson s = new Gson();
         try
         {
-            response.setContentType("application/json");
-            Gson s = new Gson();
             CatIdsBlob Blob=s.fromJson(request.getReader(),CatIdsBlob.class);
-            String s1=service.getServ(Blob);
-            if(s1.contains("invalid"))response.setStatus(400);
-            response.getWriter().println(s1);
+            if(Blob == null) {
+                super.doOptions(request, response);
+            }
+            else
+            {
+                String s1=service.getServ(Blob);
+                if(s1.contains("invalid"))response.setStatus(400);
+                response.getWriter().println(s1);
+            }
         }
         catch (Exception e)
         {

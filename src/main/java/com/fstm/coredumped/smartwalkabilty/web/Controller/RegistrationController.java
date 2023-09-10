@@ -1,5 +1,8 @@
 package com.fstm.coredumped.smartwalkabilty.web.Controller;
 
+import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.LoginResponseDTO;
+import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.organisatioDTO;
+import com.fstm.coredumped.smartwalkabilty.web.Model.Service.JWTgv;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Organisation;
 import com.fstm.coredumped.smartwalkabilty.web.Model.dao.DAOOrganisation;
 import com.google.gson.Gson;
@@ -21,7 +24,7 @@ public class RegistrationController extends HttpServlet {
         String email;
         String login;
         String password;
-        String creationDate;
+     //   String creationDate;
         String type;
     }
     @Override
@@ -38,18 +41,24 @@ public class RegistrationController extends HttpServlet {
             organisation.setEmail(fiche.email);
             organisation.setLogin(fiche.login);
             organisation.setPassword(fiche.password);
-            try {
+        /*    try {
                 organisation.setDateCreation(formatter.parse(fiche.creationDate));
             } catch (ParseException e) {
                 e.printStackTrace();
-            }
+            }*/
             organisation.setType(Integer.parseInt(fiche.type));
-            if (DAOOrganisation.getDaoOrganisation().Create(organisation))
-                resp.getWriter().println("{\"success\":\"Organization added\"}");
-            else{
+
+            if (DAOOrganisation.getDaoOrganisation().Create(organisation)) {
+                int newOrgId = DAOOrganisation.getDaoOrganisation().getGeneratedId(organisation.getLogin());
+                LoginResponseDTO dto = generateAndReturnToken(organisation);
+              //  System.out.print(newOrgId+""+dto);
+                resp.getWriter().println("{\"success\":\"Organization added\", \"id\":\"" + newOrgId + "\", \"organisation\":" + gson.toJson(dto) + "}");
+
+            } else {
                 resp.setStatus(400);
                 resp.getWriter().println("{\"error\":\"Organization not inserted\"}");
             }
+
 
         }
         else {
@@ -60,4 +69,17 @@ public class RegistrationController extends HttpServlet {
                 resp.getWriter().println("{\"error\":\"Login already used\"}");
         }
     }
+    public static LoginResponseDTO generateAndReturnToken(Organisation organisation) throws IOException {
+        String token = new JWTgv().generateToken(organisation);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return new LoginResponseDTO( token , new organisatioDTO(
+                organisation.getId(),
+                organisation.getNom(),
+              //  formatter.format(organisation.getDateCreation()),
+                organisation.getLogin(),
+                organisation.getEmail()
+        ));
+    }
+
 }
+

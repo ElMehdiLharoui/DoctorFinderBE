@@ -5,7 +5,7 @@ import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
 import java.io.Serializable;
 import java.util.List;
 
-public class ShortestPathReq extends Request implements Serializable {
+public class ShortestPathReq extends Request {
     private final GeoPoint arrPoint;
 
     public ShortestPathReq(GeoPoint depPoint, GeoPoint arrPoint) {

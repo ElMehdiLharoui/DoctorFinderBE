@@ -9,12 +9,13 @@ import java.util.Objects;
 public class Annonce implements Serializable
 {
     private int id;
-    private Date dateDebut,dateFin;
-    private String titre,description;
+
+    private String description;
     private String urlPrincipalImage;
     private List<Image> subImgs =new ArrayList<Image>();
     private List<Site> sites=new ArrayList<Site>();
     private Categorie categorie;
+
 
     public Categorie getCategorie() {
         return categorie;
@@ -25,10 +26,8 @@ public class Annonce implements Serializable
     }
 
     public Annonce(){}
-    public Annonce(Date dateDebut, Date dateFin, String titre, String description, String urlPrincipalImage) {
-        this.dateDebut = dateDebut;
-        this.dateFin = dateFin;
-        this.titre = titre;
+    public Annonce( String description, String urlPrincipalImage) {
+
         this.description = description;
         this.urlPrincipalImage = urlPrincipalImage;
     }
@@ -43,29 +42,6 @@ public class Annonce implements Serializable
         this.id = id;
     }
 
-    public Date getDateDebut() {
-        return dateDebut;
-    }
-
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public Date getDateFin() {
-        return dateFin;
-    }
-
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
-    }
-
-    public String getTitre() {
-        return titre;
-    }
-
-    public void setTitre(String titre) {
-        this.titre = titre;
-    }
 
     public String getDescription() {
         return description;
@@ -100,7 +76,7 @@ public class Annonce implements Serializable
         return id == annonce.id;
     }
     public Annonce CreateCopyWithoutSites_Images(){
-        Annonce annonce=new Annonce(dateDebut,dateFin,titre,description,urlPrincipalImage);
+        Annonce annonce=new Annonce(description,urlPrincipalImage);
         annonce.setId(this.getId());
         return annonce;
     }

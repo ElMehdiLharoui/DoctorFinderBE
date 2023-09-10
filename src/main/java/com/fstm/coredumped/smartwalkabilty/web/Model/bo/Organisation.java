@@ -6,12 +6,11 @@ import java.util.Vector;
 
 public class Organisation implements Serializable {
 
-    public static String types[] = {"Entreprise","Organisation Non Commerciale"};
     // Attributs
 
     private int id;
     private String nom;
-    private Date dateCreation;
+  //  private Date dateCreation;
     private String login;
     private String password;
     private String email;
@@ -35,10 +34,10 @@ public class Organisation implements Serializable {
         return nom;
     }
 
-    public Date getDateCreation() {
+    /*public Date getDateCreation() {
         return dateCreation;
     }
-
+*/
     public String getLogin() {
         return login;
     }
@@ -69,11 +68,11 @@ public class Organisation implements Serializable {
     public void setNom(String nom) {
         this.nom = nom;
     }
-
+/*
     public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
     }
-
+*/
     public void setLogin(String login) {
         this.login = login;
     }

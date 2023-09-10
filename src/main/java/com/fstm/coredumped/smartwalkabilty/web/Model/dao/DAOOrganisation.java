@@ -26,16 +26,21 @@ public class DAOOrganisation implements IDAO<Organisation> {
     public boolean Create(Organisation organisation) {
         try {
             PreparedStatement pr=Connexion.getCon().prepareStatement(
-                    "insert into organizations(datecreated,name,login,passHash,email,type) values(?,?,?,?,?,?) "
+                    "insert into organizations(name,login,passHash,email,type) values(?,?,?,?,?) "
             );
-            pr.setDate(1,new java.sql.Date(organisation.getDateCreation().getTime()));
-            pr.setString(2,organisation.getNom());
-            pr.setString(3,organisation.getLogin());
-            pr.setString(4, MD5Hash.MD5Hash(organisation.getPassword()));
-            pr.setString(5,organisation.getEmail());
-            pr.setInt(6,organisation.getType());
+           // pr.setDate(1,new java.sql.Date(organisation.getDateCreation().getTime()));
+            pr.setString(1,organisation.getNom());
+            pr.setString(2,organisation.getLogin());
+            pr.setString(3, MD5Hash.MD5Hash(organisation.getPassword()));
+            pr.setString(4,organisation.getEmail());
+            pr.setInt(5,organisation.getType());
 
             pr.executeUpdate();
+         /*  ResultSet generatedKeys = pr.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int generatedId = generatedKeys.getInt(1); // Assuming the ID is a long
+                organisation.setId(generatedId);
+            }*/
             return true;
         }
         catch (SQLException e){
@@ -43,6 +48,23 @@ public class DAOOrganisation implements IDAO<Organisation> {
             return false;
         }
     }
+    public int getGeneratedId(String login) {
+        try {
+            PreparedStatement pr = Connexion.getCon().prepareStatement(
+                    "SELECT id FROM organizations WHERE login=? ORDER BY id DESC LIMIT 1"
+            );
+            pr.setString(1, login); // Utilisez le login pour récupérer l'ID
+            ResultSet resultSet = pr.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
 
     @Override
     public Collection<Organisation> Retrieve() {
@@ -65,14 +87,14 @@ public class DAOOrganisation implements IDAO<Organisation> {
     public void update(Organisation organisation) {
         try {
             PreparedStatement pr=Connexion.getCon().prepareStatement(
-                    "Update organizations SET login=?,passHash=?,email=?,name=?,datecreated=? where id=? "
+                    "Update organizations SET login=?,passHash=?,email=?,name=? where id=? "
             );
             pr.setString(1,organisation.getLogin());
             pr.setString(2,organisation.getPassword());
             pr.setString(3,organisation.getEmail());
             pr.setString(4,organisation.getEmail());
-            pr.setDate(5, (Date) organisation.getDateCreation());
-            pr.setInt(6,organisation.getId());
+          //  pr.setDate(5, (Date) organisation.getDateCreation());
+            pr.setInt(5,organisation.getId());
             pr.executeUpdate();
         }catch (SQLException e){
             System.err.println(e);
@@ -96,7 +118,7 @@ public class DAOOrganisation implements IDAO<Organisation> {
     private Organisation extractOrganisation(ResultSet resultSet) throws SQLException {
         Organisation organisation=new Organisation();
         organisation.setId(resultSet.getInt("id"));
-        organisation.setDateCreation(resultSet.getDate("datecreated"));
+      //  organisation.setDateCreation(resultSet.getDate("datecreated"));
         organisation.setLogin(resultSet.getString("login"));
         organisation.setNom(resultSet.getString("name"));
         organisation.setPassword(resultSet.getString("passHash"));

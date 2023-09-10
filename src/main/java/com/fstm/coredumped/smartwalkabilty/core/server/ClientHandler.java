@@ -1,6 +1,7 @@
 package com.fstm.coredumped.smartwalkabilty.core.server;
 
 import com.fstm.coredumped.smartwalkabilty.common.controller.*;
+import com.fstm.coredumped.smartwalkabilty.common.controller.Reservation_ctrl;
 import com.fstm.coredumped.smartwalkabilty.core.danger.model.bo.Declaration;
 import com.fstm.coredumped.smartwalkabilty.core.danger.controller.DangerCtrl;
 import com.fstm.coredumped.smartwalkabilty.core.geofencing.model.bo.Geofencing;
@@ -28,8 +29,9 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
+        ObjectOutputStream oos = null;
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
+            oos = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
 
             Object req = ois.readObject();
@@ -67,6 +69,11 @@ public class ClientHandler implements Runnable{
                 DeclareDangerReq req1 = (DeclareDangerReq) req;
                 new DangerCtrl().danger_ctrl(req1);
                 oos.writeBoolean(true);
+            }else if(req instanceof  ReserveRequest){
+                System.out.println("["+d1+"] user request Reserve ...");
+                ReserveRequest req1 = (ReserveRequest) req;
+                String timeOfReservation = new Reservation_ctrl().ResevationCtrl(req1);
+                oos.writeObject(timeOfReservation);
             }
 
             d2 = LocalDateTime.now();
@@ -77,11 +84,17 @@ public class ClientHandler implements Runnable{
             System.out.println("in seconds: "+ TimeUnit.MICROSECONDS.toSeconds(d) + " seconds");
 
             oos.flush();
-        } catch (IOException e) {
-            System.out.println("IO Problems: "+e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error "+e.getMessage());
             e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            System.out.println("Class not found "+ e.getMessage());
-        }
+                    if(oos!=null){
+                        try {
+                            oos.flush();
+                            oos.close();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+        } 
     }
 }

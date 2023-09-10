@@ -4,7 +4,7 @@ import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
 
 import java.io.Serializable;
 
-public abstract class Request implements Serializable {
+public abstract class Request implements IRequest {
     private final GeoPoint actualPoint;
 
     protected Request(GeoPoint actualPoint) {
