@@ -11,14 +11,16 @@ public class ReserveRequest implements IRequest
     private String LName;
     private Date date;
     private String Phone;
+    private String selectedTime;
 
-    public ReserveRequest(int idSite, String cin, String fName, String LName, Date date ,String Phone) {
+    public ReserveRequest(int idSite, String cin, String fName, String LName, Date date ,String Phone,String selectedtime) {
         this.idSite = idSite;
         this.cin = cin;
         this.fName = fName;
         this.LName = LName;
         this.date = date;
         this.Phone = Phone;
+        this.selectedTime = selectedtime;
     }
 
     public ReserveRequest() {
@@ -74,5 +76,13 @@ public class ReserveRequest implements IRequest
 
     public boolean verifyEverythingIsNotNull(){
         return cin != null && LName != null && fName != null && idSite != 0 && date != null && Phone !=null;
+    }
+
+    public String getSelectedTime() {
+        return selectedTime;
+    }
+
+    public void setSelectedTime(String selectedTime) {
+        this.selectedTime = selectedTime;
     }
 }

@@ -1,14 +1,18 @@
 package com.fstm.coredumped.smartwalkabilty.web.Model.bo;
 
+import com.fstm.coredumped.smartwalkabilty.common.utils.TimeCalcules;
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
+import com.fstm.coredumped.smartwalkabilty.common.model.bo.Reservation;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.fstm.coredumped.smartwalkabilty.common.utils.DateHandling.equalsByDateOnly;
 
 public class Site implements Serializable
 {
+    private static final long serialVersionUID = 123456789L;
     private int id;
     private String Name;
     private String Address;
@@ -18,6 +22,7 @@ public class Site implements Serializable
     private int dureeviste, maxpatient;
     private String heuredebut,heurefin;
     private String weekday;
+    private Collection<Reservation> reservations;
     public String getWeekday() {
         return weekday;
     }
@@ -143,4 +148,34 @@ public class Site implements Serializable
     }
 
 
+    public Collection<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Collection<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+    public List<Integer> calculateAvailableTimesToReserveInMinutes(Date date)
+    {
+        int currentTime = TimeCalcules.getCurrentTimeInMinutes();
+        List<Integer> minutesReservations = reservations.stream().filter(x-> equalsByDateOnly(x.getDate(),date)).map(Reservation::getTempDeReservation).map(TimeCalcules::stringHourToMinutes).sorted().collect(Collectors.toList());
+        List<Integer> allTimesInDay = calculateAllReservationTimes();
+        if(!equalsByDateOnly(date,new Date())){
+            return allTimesInDay.stream().filter(x-> !minutesReservations.contains(x)).collect(Collectors.toList());
+        }
+        return allTimesInDay.stream().filter(x-> !minutesReservations.contains(x) && x >= currentTime).collect(Collectors.toList());
+    }
+    public List<String> calculateAvailableTimesToReserveInStringHours(Date date)
+    {
+        return calculateAvailableTimesToReserveInMinutes(date).stream().map(TimeCalcules::minutesToStringHour).collect(Collectors.toList());
+    }
+    public List<Integer> calculateAllReservationTimes(){
+        int startTime = TimeCalcules.stringHourToMinutes(heuredebut);
+        int endTime = TimeCalcules.stringHourToMinutes(heurefin);
+        List<Integer> times = new ArrayList<>();
+        for (int i = startTime; i < endTime; i+= dureeviste) {
+            times.add(i);
+        }
+        return times;
+    }
 }

@@ -6,6 +6,7 @@ import com.fstm.coredumped.smartwalkabilty.core.danger.model.bo.Declaration;
 import com.fstm.coredumped.smartwalkabilty.core.danger.controller.DangerCtrl;
 import com.fstm.coredumped.smartwalkabilty.core.geofencing.model.bo.Geofencing;
 import com.fstm.coredumped.smartwalkabilty.core.routing.model.bo.Routage;
+import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.ResepenseDTO;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
 
 import java.io.IOException;
@@ -72,7 +73,7 @@ public class ClientHandler implements Runnable{
             }else if(req instanceof  ReserveRequest){
                 System.out.println("["+d1+"] user request Reserve ...");
                 ReserveRequest req1 = (ReserveRequest) req;
-                String timeOfReservation = new Reservation_ctrl().ResevationCtrl(req1);
+                ResepenseDTO timeOfReservation = new Reservation_ctrl().ResevationCtrl(req1);
                 oos.writeObject(timeOfReservation);
             }
 

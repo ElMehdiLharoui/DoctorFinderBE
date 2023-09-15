@@ -1,8 +1,8 @@
 package com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS;
 
-public class MobileDTO {
+public class NumberAndTimeDTO {
     int numberinline;
-    String tempdereservation;
+    String tempdereservation = "";
 
     public int getNumberinline() {
         return numberinline;
