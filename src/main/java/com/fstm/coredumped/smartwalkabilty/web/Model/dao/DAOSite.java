@@ -1,7 +1,9 @@
 package com.fstm.coredumped.smartwalkabilty.web.Model.dao;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.*;
+import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Annonce;
+import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Organisation;
+import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
 
 import java.sql.*;
 import java.util.Collection;

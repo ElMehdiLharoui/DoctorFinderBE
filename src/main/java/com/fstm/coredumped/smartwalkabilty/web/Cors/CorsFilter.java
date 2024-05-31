@@ -1,6 +1,6 @@
 package com.fstm.coredumped.smartwalkabilty.web.Cors;
+
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 

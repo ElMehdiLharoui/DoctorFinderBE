@@ -2,8 +2,6 @@ package com.fstm.coredumped.smartwalkabilty.common.controller;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
 
-import java.io.Serializable;
-
 public abstract class Request implements IRequest {
     private final GeoPoint actualPoint;
 

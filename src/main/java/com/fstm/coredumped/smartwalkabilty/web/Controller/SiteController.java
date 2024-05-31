@@ -1,20 +1,15 @@
 package com.fstm.coredumped.smartwalkabilty.web.Controller;
 
 import com.fstm.coredumped.smartwalkabilty.web.Model.Service.SiteService;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.*;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.blobs.IdsSiteBlob;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.blobs.SiteBlob;
-import com.fstm.coredumped.smartwalkabilty.web.Model.dao.DAOSite;
 import com.google.gson.Gson;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.LinkedList;
-
-import static java.util.stream.Collectors.joining;
 
 public class SiteController extends HttpServlet {
 

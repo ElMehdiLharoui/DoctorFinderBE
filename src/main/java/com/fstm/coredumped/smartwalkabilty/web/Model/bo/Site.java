@@ -1,8 +1,8 @@
 package com.fstm.coredumped.smartwalkabilty.web.Model.bo;
 
-import com.fstm.coredumped.smartwalkabilty.common.utils.TimeCalcules;
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.Reservation;
+import com.fstm.coredumped.smartwalkabilty.common.utils.TimeCalcules;
 
 import java.io.Serializable;
 import java.util.*;

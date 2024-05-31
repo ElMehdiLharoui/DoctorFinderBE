@@ -1,18 +1,10 @@
 package com.fstm.coredumped.smartwalkabilty.web.Model.dao;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.Reservation;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Annonce;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Image;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.sql.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ReservationDAO implements IDAO<Reservation>{

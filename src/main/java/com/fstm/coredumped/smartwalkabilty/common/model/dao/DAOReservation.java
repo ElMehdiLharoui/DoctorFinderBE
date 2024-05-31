@@ -1,8 +1,6 @@
 package com.fstm.coredumped.smartwalkabilty.common.model.dao;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.Reservation;
-
-
 import com.fstm.coredumped.smartwalkabilty.web.Model.dao.Connexion;
 import com.fstm.coredumped.smartwalkabilty.web.Model.dao.IDAO;
 

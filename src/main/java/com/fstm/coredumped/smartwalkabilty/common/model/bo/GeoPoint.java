@@ -1,13 +1,9 @@
 package com.fstm.coredumped.smartwalkabilty.common.model.bo;
 
-import static java.lang.Math.asin;
-import static java.lang.Math.cos;
-import static java.lang.Math.pow;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
-
 import java.io.Serializable;
 import java.util.Objects;
+
+import static java.lang.Math.*;
 
 public class GeoPoint implements Serializable {
     private static final long serialVersionUID=15L;

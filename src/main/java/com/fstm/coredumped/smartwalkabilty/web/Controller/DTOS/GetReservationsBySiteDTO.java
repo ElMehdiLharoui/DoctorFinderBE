@@ -1,10 +1,6 @@
 package com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.Reservation;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Annonce;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Image;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
-import com.fstm.coredumped.smartwalkabilty.web.Model.dao.DAOCategorie;
 
 import java.text.DateFormat;
 import java.text.ParseException;

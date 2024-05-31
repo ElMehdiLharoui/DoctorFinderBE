@@ -1,8 +1,5 @@
 package com.fstm.coredumped.smartwalkabilty.common.controller;
 
-import com.fstm.coredumped.smartwalkabilty.common.controller.ReserveRequest;
-import com.fstm.coredumped.smartwalkabilty.common.model.bo.Reservation;
-import com.fstm.coredumped.smartwalkabilty.common.model.dao.DAOReservation;
 import com.fstm.coredumped.smartwalkabilty.common.model.service.ReservationService;
 import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.ResepenseDTO;
 

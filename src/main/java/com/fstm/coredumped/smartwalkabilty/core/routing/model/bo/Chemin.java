@@ -1,11 +1,11 @@
 package com.fstm.coredumped.smartwalkabilty.core.routing.model.bo;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Annonce;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Chemin implements Serializable
 {

@@ -7,7 +7,6 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Organisation;
-import com.fstm.coredumped.smartwalkabilty.web.Model.dao.DAOOrganisation;
 
 import java.util.Date;
 

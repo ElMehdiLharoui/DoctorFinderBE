@@ -1,6 +1,6 @@
 package com.fstm.coredumped.smartwalkabilty.core.routing.model.bo;
+
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
-import com.fstm.coredumped.smartwalkabilty.core.routing.model.dao.DAOGraph;
 
 import java.util.*;
 

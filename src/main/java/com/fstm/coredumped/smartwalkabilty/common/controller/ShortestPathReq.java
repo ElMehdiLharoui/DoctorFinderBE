@@ -2,9 +2,6 @@ package com.fstm.coredumped.smartwalkabilty.common.controller;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
 
-import java.io.Serializable;
-import java.util.List;
-
 public class ShortestPathReq extends Request {
     private final GeoPoint arrPoint;
 

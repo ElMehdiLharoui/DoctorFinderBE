@@ -1,10 +1,7 @@
 package com.fstm.coredumped.smartwalkabilty.web.Controller;
 
 import com.fstm.coredumped.smartwalkabilty.web.Model.Service.CategoriesService;
-import com.fstm.coredumped.smartwalkabilty.web.Model.Service.JWTgv;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Categorie;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.blobs.CatIdsBlob;
-import com.fstm.coredumped.smartwalkabilty.web.Model.dao.DAOCategorie;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;

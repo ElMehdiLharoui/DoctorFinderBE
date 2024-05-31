@@ -5,9 +5,11 @@ import com.fstm.coredumped.smartwalkabilty.core.routing.model.bo.Chemin;
 import com.fstm.coredumped.smartwalkabilty.core.routing.model.bo.Vertex;
 import com.fstm.coredumped.smartwalkabilty.core.routing.model.dao.Connexion;
 
-
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class DAOGAnnonce {
 

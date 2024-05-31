@@ -2,7 +2,6 @@ package com.fstm.coredumped.smartwalkabilty.web.Controller.websocket;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.service.ReservationService;
 import com.fstm.coredumped.smartwalkabilty.common.utils.DateHandling;
-import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.NumberAndTimeDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

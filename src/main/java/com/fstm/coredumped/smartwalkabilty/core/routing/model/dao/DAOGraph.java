@@ -66,7 +66,7 @@ public class DAOGraph implements IDAOGraph {
                 v.setArrive(new GeoPoint(resultSet.getInt("target"), resultSet.getDouble("y2"), resultSet.getDouble("x2")));
                 v.setDistance(resultSet.getDouble("length_m"));
                 v.setRisk(0);
-                //v.setRisk(resultSet.getInt("risk"));
+                // v.setRisk(resultSet.getInt("risk"));
                 graph.Add_Route(v);
             }
 
@@ -90,3 +90,4 @@ public class DAOGraph implements IDAOGraph {
         }
     }
 }
+//-7.5794811 ,33.5411488 => -7.6319347, 33.5170524

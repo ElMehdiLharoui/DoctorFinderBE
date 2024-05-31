@@ -1,8 +1,8 @@
 package com.fstm.coredumped.smartwalkabilty.web.Controller;
 
 import com.fstm.coredumped.smartwalkabilty.common.controller.ReserveRequest;
-import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.GetReservationsBySiteDTO;
 import com.fstm.coredumped.smartwalkabilty.common.model.service.ReservationService;
+import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.GetReservationsBySiteDTO;
 import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.ResepenseDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Reader;
 
 
 public class ReservationController extends HttpServlet {

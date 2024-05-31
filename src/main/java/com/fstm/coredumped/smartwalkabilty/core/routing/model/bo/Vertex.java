@@ -3,9 +3,7 @@ package com.fstm.coredumped.smartwalkabilty.core.routing.model.bo;
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
-import java.util.Random;
 
 public class Vertex implements Serializable
 {

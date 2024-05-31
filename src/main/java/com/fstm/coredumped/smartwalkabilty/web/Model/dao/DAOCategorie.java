@@ -1,18 +1,12 @@
 package com.fstm.coredumped.smartwalkabilty.web.Model.dao;
 
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Annonce;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Categorie;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Image;
-import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 public class DAOCategorie implements IDAO<Categorie>{
     private static DAOCategorie daoCategorie=null;

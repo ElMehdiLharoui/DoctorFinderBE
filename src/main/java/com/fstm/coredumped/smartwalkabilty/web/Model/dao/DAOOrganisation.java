@@ -3,7 +3,9 @@ package com.fstm.coredumped.smartwalkabilty.web.Model.dao;
 import com.fstm.coredumped.smartwalkabilty.web.Model.Service.MD5Hash;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Organisation;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
