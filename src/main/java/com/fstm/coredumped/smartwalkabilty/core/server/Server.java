@@ -14,11 +14,14 @@ public class Server {
                 System.out.printf("Server is Listening on port : %s%n", port);
 
                 Socket client = server.accept();
-                System.out.println("New client connected: " + client.getInetAddress().getHostAddress());
-                ClientHandler clientHandler = new ClientHandler(client);
 
-                // launching a new client handler
-                new Thread(clientHandler).start();
+                if (client != null && client.isConnected()) {
+                    System.out.println("New client connected: " + client.getInetAddress().getHostAddress());
+                    ClientHandler clientHandler = new ClientHandler(client);
+
+                    // launching a new client handler
+                    new Thread(clientHandler).start();
+                }
             }
 
         } catch (Exception e) {
