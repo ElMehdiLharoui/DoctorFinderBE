@@ -16,12 +16,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class AuthentificationController extends HttpServlet {
-    public class LoginBlob {
+    public static class LoginBlob {
         String login;
         String password;
         LoginBlob(){}
     }
-    public class err{
+    public static class err{
         String error;
         err(String errMessage){
             this.error = errMessage;

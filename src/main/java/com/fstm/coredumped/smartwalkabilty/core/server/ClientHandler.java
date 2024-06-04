@@ -5,10 +5,9 @@ import com.fstm.coredumped.smartwalkabilty.core.danger.controller.DangerCtrl;
 import com.fstm.coredumped.smartwalkabilty.core.danger.model.bo.Declaration;
 import com.fstm.coredumped.smartwalkabilty.core.geofencing.model.bo.Geofencing;
 import com.fstm.coredumped.smartwalkabilty.core.routing.model.bo.Routage;
-import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.ResepenseDTO;
+import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.ResponseDTO;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class ClientHandler implements Runnable{
-    private Socket clientSocket;
+    private final Socket clientSocket;
     private Routage routage;
     LocalDateTime d1;
     LocalDateTime d2;
@@ -29,9 +28,7 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        ObjectOutputStream oos = null;
-        try {
-            oos = new ObjectOutputStream(clientSocket.getOutputStream());
+        try (ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream())){
             ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
 
             Object req = ois.readObject();
@@ -58,7 +55,7 @@ public class ClientHandler implements Runnable{
             else if(req instanceof RequestPerimetreAnnonce){
                 System.out.println("["+d1+"] user request announces in Radius: starting geofencing ...");
                 RequestPerimetreAnnonce req1 = (RequestPerimetreAnnonce) req;
-                // handle the case where the user requested juste the available announces
+                // handle the case where the user requested just the available announces
                 // in a given Radius
                 List<Site> list = Geofencing.findAllAnnoncesByRadius(req1.getActualPoint(), req1.getPerimetre(),req1.getCategorieList());
                 oos.writeObject(list);
@@ -72,7 +69,7 @@ public class ClientHandler implements Runnable{
             }else if(req instanceof  ReserveRequest){
                 System.out.println("["+d1+"] user request Reserve ...");
                 ReserveRequest req1 = (ReserveRequest) req;
-                ResepenseDTO timeOfReservation = new Reservation_ctrl().ResevationCtrl(req1);
+                ResponseDTO timeOfReservation = new Reservation_ctrl().ResevationCtrl(req1);
                 oos.writeObject(timeOfReservation);
             }
 
@@ -87,14 +84,6 @@ public class ClientHandler implements Runnable{
         } catch (Exception e) {
             System.out.println("Error "+e.getMessage());
             e.printStackTrace();
-                    if(oos!=null){
-                        try {
-                            oos.flush();
-                            oos.close();
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
         } 
     }
 }

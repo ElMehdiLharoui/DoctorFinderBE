@@ -6,7 +6,7 @@ import com.fstm.coredumped.smartwalkabilty.common.model.dao.DAOReservation;
 import com.fstm.coredumped.smartwalkabilty.common.utils.TimeCalcules;
 import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.GetReservationsBySiteDTO;
 import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.NumberAndTimeDTO;
-import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.ResepenseDTO;
+import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.ResponseDTO;
 import com.fstm.coredumped.smartwalkabilty.web.Controller.websocket.SiteSimpleDataWebSocket;
 import com.fstm.coredumped.smartwalkabilty.web.Controller.websocket.SiteTimeAvailableWebSocket;
 import com.fstm.coredumped.smartwalkabilty.web.Model.Service.JWTgv;
@@ -30,7 +30,7 @@ public class ReservationService {
         this.daoReservation = new DAOReservation();
     }
 
-    public ResepenseDTO CreateReservation(ReserveRequest obj){
+    public ResponseDTO CreateReservation(ReserveRequest obj){
         Reservation reservation = daoReservation.getReservationBySiteAndCINAndDate(obj.getIdSite(),obj.getCin(),new Date(obj.getDate().getTime()));
 
         if(reservation != null){
@@ -56,8 +56,8 @@ public class ReservationService {
 
         return fillObject(obj,"Error: Unknown Error");
     }
-    private ResepenseDTO fillObject(ReserveRequest obj,String temp) {
-        ResepenseDTO reservation = new ResepenseDTO();
+    private ResponseDTO fillObject(ReserveRequest obj, String temp) {
+        ResponseDTO reservation = new ResponseDTO();
         reservation.setCreatedAt(new java.util.Date()); // Set la date actuelle
         reservation.setCIN(obj.getCin());
         reservation.setlName(obj.getLName());
