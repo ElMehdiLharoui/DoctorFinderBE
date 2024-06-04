@@ -27,7 +27,7 @@ public class DAOCategorie implements IDAO<Categorie>{
         try {
             Collection<Categorie> categories = new LinkedList<>();
             Categorie categorie=null;
-            PreparedStatement sql=Connexion.getCon().prepareStatement("SELECT * from categories");
+            PreparedStatement sql= DBConnexion.getCon().prepareStatement("SELECT * from categories");
             ResultSet set= sql.executeQuery();
             while(set.next())
             {
@@ -60,7 +60,7 @@ public class DAOCategorie implements IDAO<Categorie>{
     public Categorie getById(int id){
         try {
             Categorie categorie=null;
-            PreparedStatement sql=Connexion.getCon().prepareStatement("SELECT * from categories where id=?");
+            PreparedStatement sql= DBConnexion.getCon().prepareStatement("SELECT * from categories where id=?");
             sql.setInt(1,id);
             ResultSet set= sql.executeQuery();
             if(set.next())

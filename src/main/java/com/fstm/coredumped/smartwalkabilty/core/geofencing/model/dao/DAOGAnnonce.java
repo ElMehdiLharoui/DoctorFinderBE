@@ -3,7 +3,7 @@ package com.fstm.coredumped.smartwalkabilty.core.geofencing.model.dao;
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
 import com.fstm.coredumped.smartwalkabilty.core.routing.model.bo.Chemin;
 import com.fstm.coredumped.smartwalkabilty.core.routing.model.bo.Vertex;
-import com.fstm.coredumped.smartwalkabilty.core.routing.model.dao.Connexion;
+import com.fstm.coredumped.smartwalkabilty.core.routing.model.dao.OSMDBConnexion;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class DAOGAnnonce {
 
     public Set<Integer> getSitesOfChemin(Chemin chemin, double radius) throws SQLException {
         Set<Integer> idSet = new HashSet<Integer>();
-        Connection connection = Connexion.getConnection();
+        Connection connection = OSMDBConnexion.getConnection();
         List<Integer> list = new ArrayList<Integer>();
 
         for (Vertex v : chemin.getVertices()){
@@ -39,7 +39,7 @@ public class DAOGAnnonce {
 
     public Set<Integer> getSitesOfPoint(GeoPoint point, double radius) throws SQLException {
         Set<Integer> idSet = new HashSet<Integer>();
-        Connection connection = com.fstm.coredumped.smartwalkabilty.core.routing.model.dao.Connexion.getConnection();
+        Connection connection = OSMDBConnexion.getConnection();
 
         PreparedStatement ps = connection.prepareStatement("SELECT id FROM site WHERE "
                 + "ST_Contains(ST_Buffer(ST_SetSRID(ST_MakePoint(?,?), 4326)::geography,?)::geometry,ST_SetSRID(ST_MakePoint(longitude,latitude), 4326));");

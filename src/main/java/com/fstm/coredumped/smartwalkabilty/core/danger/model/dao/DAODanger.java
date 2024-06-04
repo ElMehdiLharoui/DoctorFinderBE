@@ -5,7 +5,7 @@ import com.fstm.coredumped.smartwalkabilty.common.controller.DeclareDangerReq;
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
 import com.fstm.coredumped.smartwalkabilty.core.danger.model.bo.*;
 import com.fstm.coredumped.smartwalkabilty.core.routing.model.bo.Vertex;
-import com.fstm.coredumped.smartwalkabilty.core.routing.model.dao.Connexion;
+import com.fstm.coredumped.smartwalkabilty.core.routing.model.dao.OSMDBConnexion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ public class DAODanger {
 
         try{
 
-            Connection c = Connexion.getConnection();
+            Connection c = OSMDBConnexion.getConnection();
             int vertexId = this.getWayGidByPoint(dangerReq.getActualPoint());
             int id_type = this.getIdTypeFromType(dangerReq.getDanger().toString());
             if(vertexId != -1 && id_type != -1){
@@ -50,7 +50,7 @@ public class DAODanger {
 
     public int getWayGidByPoint(GeoPoint declaredPoint){
         try {
-            Connection c = Connexion.getConnection();
+            Connection c = OSMDBConnexion.getConnection();
             PreparedStatement preparedStatement = c.prepareStatement("select w.gid \n" +
                     "from public.ways w\n" +
                     "order by st_distance(w.the_geom,\n" +
@@ -77,7 +77,7 @@ public class DAODanger {
 
     public int getIdTypeFromType(String type){
         try {
-            Connection c = Connexion.getConnection();
+            Connection c = OSMDBConnexion.getConnection();
             PreparedStatement preparedStatement = c.prepareStatement("SELECT id_type from dangertype where name LIKE ?");
             preparedStatement.setString(1, type);
 
@@ -99,7 +99,7 @@ public class DAODanger {
 
         try {
 
-            Connection c = Connexion.getConnection();
+            Connection c = OSMDBConnexion.getConnection();
             PreparedStatement preparedStatement = c.prepareStatement("select t.name, w.x1, w.y1, w.x2, w.y2, w.length_m, d.date, d.degree\n" +
                     "FROM dangertype t \n" +
                     "JOIN declaration d on d.id_type = t.id_type \n" +

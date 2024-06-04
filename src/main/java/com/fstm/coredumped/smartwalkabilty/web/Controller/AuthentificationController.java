@@ -14,16 +14,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 public class AuthentificationController extends HttpServlet {
     public static class LoginBlob {
         String login;
         String password;
-        LoginBlob(){}
+
+        LoginBlob() {
+        }
     }
-    public static class err{
+
+    public static class err {
         String error;
-        err(String errMessage){
+
+        err(String errMessage) {
             this.error = errMessage;
         }
     }
@@ -38,30 +43,29 @@ public class AuthentificationController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         resp.setContentType("application/json");
-
         Gson gson = new Gson();
-        LoginBlob blob = gson.fromJson(req.getReader(), LoginBlob.class);
-        String generatedPassword = MD5Hash.MD5Hash(blob.password);
-        Organisation organisation = new DAOOrganisation().authentification(blob.login,generatedPassword);
-        if (organisation != null) {
-            LoginResponseDTO dto = generateAndReturnToken(organisation);
-            resp.getWriter().println(gson.toJson(dto));
+        Optional<LoginBlob> blob = Optional.ofNullable(gson.fromJson(req.getReader(), LoginBlob.class));
+        if (blob.isPresent()) {
+            String generatedPassword = MD5Hash.md5Hash(blob.get().password);
+            Organisation organisation = new DAOOrganisation().authentification(blob.get().login, generatedPassword);
+            if (organisation != null) {
+                LoginResponseDTO dto = generateAndReturnToken(organisation);
+                resp.getWriter().println(gson.toJson(dto));
+                return;
+            }
         }
-        else {
-            resp.setStatus(400);
-            resp.getWriter().println(gson.toJson(new err("Authentication Error : no account found with the provided login/password")));
-        }
+
+        resp.setStatus(400);
+        resp.getWriter().println(gson.toJson(new err("Authentication Error : no account found with the provided login/password")));
     }
 
-    public static LoginResponseDTO generateAndReturnToken(Organisation organisation) throws IOException {
+    public static LoginResponseDTO generateAndReturnToken(Organisation organisation) {
         String token = new JWTgv().generateToken(organisation);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        return new LoginResponseDTO( token , new organisatioDTO(
+        return new LoginResponseDTO(token, new organisatioDTO(
                 organisation.getId(),
                 organisation.getNom(),
-               // formatter.format(organisation.getDateCreation()),
+                // formatter.format(organisation.getDateCreation()),
                 organisation.getLogin(),
                 organisation.getEmail()
         ));

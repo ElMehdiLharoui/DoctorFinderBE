@@ -6,11 +6,12 @@ import java.net.Socket;
 
 public class Server {
     public static void main(String[] args) {
-        try (ServerSocket server = new ServerSocket(1337)) {
+        String portEnv = System.getenv("PORT");
+        int port = Integer.parseInt(portEnv);
+        try (ServerSocket server = new ServerSocket(port)) {
 
             while (true) {
-                System.out.println("Server is Lestning " + InetAddress.getLocalHost().getHostAddress() + " port : 1337");
-
+                System.out.printf("Server is Listening on port : %s%n", port);
 
                 Socket client = server.accept();
                 System.out.println("New client connected: " + client.getInetAddress().getHostAddress());

@@ -1,6 +1,7 @@
 package com.fstm.coredumped.smartwalkabilty.web.Model.dao;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.GeoPoint;
+import com.fstm.coredumped.smartwalkabilty.core.routing.model.dao.OSMDBConnexion;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Annonce;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Organisation;
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
@@ -25,9 +26,9 @@ public class DAOSite implements IDAO<Site>{
     public boolean Create(Site obj)  {
         boolean returnBool = false;
         try {
-            Connexion.getCon().setAutoCommit(false);
+            DBConnexion.getCon().setAutoCommit(false);
 
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("INSERT INTO site (name ,datecreated,id_organisation,location,address,dureeviste,maxpatient,heuredebut,heurefin,weekday) VALUES (?,?,?,point(?,?),?,?,?,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement("INSERT INTO site (name ,datecreated,id_organisation,location,address,dureeviste,maxpatient,heuredebut,heurefin,weekday) VALUES (?,?,?,point(?,?),?,?,?,?,?,?) ", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, obj.getName());
             preparedStatement.setDate(2, new Date(obj.getDateCreated().getTime()));
             preparedStatement.setInt(3,obj.getOrganisation().getId());
@@ -44,12 +45,12 @@ public class DAOSite implements IDAO<Site>{
 
             if(set.next()) obj.setId(set.getInt(1));
 
-            Connexion.getCon().commit();
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().commit();
+            DBConnexion.getCon().setAutoCommit(true);
             returnBool = true;
         }catch (SQLException e){
             try {
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             } catch (SQLException ex) {
                 System.err.println(ex);
                 return  false;
@@ -61,7 +62,7 @@ public class DAOSite implements IDAO<Site>{
         Connection connection =null;
 
         try{
-            connection = com.fstm.coredumped.smartwalkabilty.core.routing.model.dao.Connexion.getConnection();
+            connection = OSMDBConnexion.getConnection();
             connection.setAutoCommit(false);
             PreparedStatement ps = connection.prepareStatement("INSERT INTO site "
             + "(id, latitude, longitude)"
@@ -90,7 +91,7 @@ public class DAOSite implements IDAO<Site>{
     public void extractAnnonceSites(Annonce annonce)throws SQLException
     {
 
-        PreparedStatement sql=Connexion.getCon().prepareStatement(" SELECT S.* FROM site S join annonces_con_site on id_site=id where id_annonce=?");
+        PreparedStatement sql= DBConnexion.getCon().prepareStatement(" SELECT S.* FROM site S join annonces_con_site on id_site=id where id_annonce=?");
         sql.setInt(1,annonce.getId());
         ResultSet set= sql.executeQuery();
 
@@ -106,7 +107,7 @@ public class DAOSite implements IDAO<Site>{
         try {
             Organisation organisation =null;
             Site site=null;
-            PreparedStatement sql=Connexion.getCon().prepareStatement("SELECT *,location[0] as lat,location[1] as lng From site where id=?");
+            PreparedStatement sql= DBConnexion.getCon().prepareStatement("SELECT *,location[0] as lat,location[1] as lng From site where id=?");
             sql.setInt(1,id);
             ResultSet set= sql.executeQuery();
             if(set.next())
@@ -126,7 +127,7 @@ public class DAOSite implements IDAO<Site>{
         try {
             Organisation organisation =null;
             Site site=null;
-            PreparedStatement sql=Connexion.getCon().prepareStatement("SELECT *,location[0] as lat,location[1] as lng From site where id=?");
+            PreparedStatement sql= DBConnexion.getCon().prepareStatement("SELECT *,location[0] as lat,location[1] as lng From site where id=?");
             sql.setInt(1,id);
             ResultSet set= sql.executeQuery();
             if(set.next())
@@ -148,7 +149,7 @@ public class DAOSite implements IDAO<Site>{
         try {
             Collection<Site> sites = new LinkedList<Site>();
             Site site=null;
-            PreparedStatement sql=Connexion.getCon().prepareStatement("SELECT *,location[0] as lat,location[1] as lng From site where id_organisation=?");
+            PreparedStatement sql= DBConnexion.getCon().prepareStatement("SELECT *,location[0] as lat,location[1] as lng From site where id_organisation=?");
             sql.setInt(1,id_organisation);
             ResultSet set= sql.executeQuery();
             while(set.next())
@@ -191,9 +192,9 @@ public class DAOSite implements IDAO<Site>{
     public void update(Site obj) {
          try{
 
-             Connexion.getCon().setAutoCommit(false);
+             DBConnexion.getCon().setAutoCommit(false);
 
-             PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("UPDATE  site SET name =?,datecreated=?,id_organisation=?,location=point(?,?),address=? ,dureeviste=?,maxpatient=?,heuredebut=?,heurefin=?,weekday=? where id=?");
+             PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement("UPDATE  site SET name =?,datecreated=?,id_organisation=?,location=point(?,?),address=? ,dureeviste=?,maxpatient=?,heuredebut=?,heurefin=?,weekday=? where id=?");
              preparedStatement.setString(1, obj.getName());
              preparedStatement.setDate(2, new Date(obj.getDateCreated().getTime()));
              preparedStatement.setInt(3,obj.getOrganisation().getId());
@@ -208,13 +209,13 @@ public class DAOSite implements IDAO<Site>{
              preparedStatement.setString(12,obj.getWeekday());
              preparedStatement.executeUpdate();
 
-             Connexion.getCon().commit();
-             Connexion.getCon().setAutoCommit(true);
+             DBConnexion.getCon().commit();
+             DBConnexion.getCon().setAutoCommit(true);
 
          }
          catch (SQLException e){
              try {
-                 Connexion.getCon().rollback();
+                 DBConnexion.getCon().rollback();
              } catch (SQLException ex) {
                  System.err.println(ex);
              }
@@ -225,22 +226,22 @@ public class DAOSite implements IDAO<Site>{
     @Override
     public boolean delete(Site obj) {
         try {
-            Connexion.getCon().setAutoCommit(false);
-            PreparedStatement sql=Connexion.getCon().prepareStatement("DELETE FROM site where id=?");
+            DBConnexion.getCon().setAutoCommit(false);
+            PreparedStatement sql= DBConnexion.getCon().prepareStatement("DELETE FROM site where id=?");
 
             sql.setInt(1,obj.getId());
 
             sql.executeUpdate();
 
-            Connexion.getCon().commit();
+            DBConnexion.getCon().commit();
 
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().setAutoCommit(true);
 
             return true;
 
         }catch (Exception e){
             try{
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             }catch (SQLException ex){
                 System.err.println(ex);
                 return  false;
@@ -252,18 +253,18 @@ public class DAOSite implements IDAO<Site>{
     public boolean deleteMultiple(Collection<Site> sites)
     {
         try {
-            Connexion.getCon().setAutoCommit(false);
+            DBConnexion.getCon().setAutoCommit(false);
             for (Site site: sites) {
-                PreparedStatement sql=Connexion.getCon().prepareStatement("DELETE FROM site where id=?");
+                PreparedStatement sql= DBConnexion.getCon().prepareStatement("DELETE FROM site where id=?");
                 sql.setInt(1,site.getId());
                 sql.executeUpdate();
             }
-            Connexion.getCon().commit();
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().commit();
+            DBConnexion.getCon().setAutoCommit(true);
             return true;
         } catch (Exception e) {
             try {
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             } catch (SQLException ex) {
                 System.err.println(ex);
                 return  false;
@@ -275,7 +276,7 @@ public class DAOSite implements IDAO<Site>{
     public boolean existance(int id) {
         try {
             PreparedStatement sql= null;
-            sql = Connexion.getCon().prepareStatement("SELECT * From site where id=?");
+            sql = DBConnexion.getCon().prepareStatement("SELECT * From site where id=?");
             sql.setInt(1,id);
             ResultSet set= sql.executeQuery();
             if(set.next())return true;
@@ -288,7 +289,7 @@ public class DAOSite implements IDAO<Site>{
     public int getDureeVisiteBySiteId(int siteId) {
         int dureeVisite = 0;
         try {
-            Connection connection = Connexion.getCon();
+            Connection connection = DBConnexion.getCon();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT DureViste FROM site WHERE id = ?");
             preparedStatement.setInt(1, siteId);
 

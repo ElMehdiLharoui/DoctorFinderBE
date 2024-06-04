@@ -21,8 +21,8 @@ public class DAOAnnonce implements IDAO<Annonce>{
     public boolean Create(Annonce obj)
     {
         try {
-            Connexion.getCon().setAutoCommit(false);
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("INSERT INTO Annonces (urlimageprincipale,description,id_cat) VALUES (?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+            DBConnexion.getCon().setAutoCommit(false);
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement("INSERT INTO Annonces (urlimageprincipale,description,id_cat) VALUES (?,?,?) ", Statement.RETURN_GENERATED_KEYS);
             fillStatement(obj, preparedStatement);
             preparedStatement.executeUpdate();
             ResultSet set= preparedStatement.getGeneratedKeys();
@@ -34,12 +34,12 @@ public class DAOAnnonce implements IDAO<Annonce>{
             {
                 Create_Relation_Ann_Site(obj,site);
             }
-            Connexion.getCon().commit();
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().commit();
+            DBConnexion.getCon().setAutoCommit(true);
             return true;
         }catch (SQLException e){
             try {
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             } catch (SQLException ex) {
                 System.err.println(ex);
                 return  false;
@@ -59,7 +59,7 @@ public class DAOAnnonce implements IDAO<Annonce>{
     {
         List<Annonce> annonces=new LinkedList<Annonce>();
         try {
-            PreparedStatement sql=Connexion.getCon().prepareStatement("SELECT Distinct(A.id),A.* From annonces A JOIN annonces_Con_Site aCS on A.id = aCS.id_annonce JOIN site S  on aCS.id_site=S.id where id_organisation=?");
+            PreparedStatement sql= DBConnexion.getCon().prepareStatement("SELECT Distinct(A.id),A.* From annonces A JOIN annonces_Con_Site aCS on A.id = aCS.id_annonce JOIN site S  on aCS.id_site=S.id where id_organisation=?");
             sql.setInt(1,id_org);
             ResultSet set= sql.executeQuery();
             while (set.next()) annonces.add(extractAnnonce(set));
@@ -71,7 +71,7 @@ public class DAOAnnonce implements IDAO<Annonce>{
     public Annonce findById(int id){
         try {
             Annonce annonce=null;
-            PreparedStatement sql=Connexion.getCon().prepareStatement("SELECT * From annonces where id=?");
+            PreparedStatement sql= DBConnexion.getCon().prepareStatement("SELECT * From annonces where id=?");
             sql.setInt(1,id);
             ResultSet set= sql.executeQuery();
             if(set.next())
@@ -101,8 +101,8 @@ public class DAOAnnonce implements IDAO<Annonce>{
     public void update(Annonce obj)
     {
         try {
-            Connexion.getCon().setAutoCommit(false);
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("UPDATE  annonces SET urlimageprincipale=?,description=?,id_cat=?, where id=?");
+            DBConnexion.getCon().setAutoCommit(false);
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement("UPDATE  annonces SET urlimageprincipale=?,description=?,id_cat=?, where id=?");
             fillStatement(obj, preparedStatement);
             preparedStatement.setInt(4,obj.getId());
             preparedStatement.executeUpdate();
@@ -117,11 +117,11 @@ public class DAOAnnonce implements IDAO<Annonce>{
 
                 Create_Relation_Ann_Site(obj,site);
             }
-            Connexion.getCon().commit();
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().commit();
+            DBConnexion.getCon().setAutoCommit(true);
         }catch (SQLException e){
             try {
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             } catch (SQLException ex) {
                 System.err.println(ex);
             }
@@ -142,16 +142,16 @@ public class DAOAnnonce implements IDAO<Annonce>{
     public boolean delete(Annonce obj)
     {
         try {
-            Connexion.getCon().setAutoCommit(false);
-            PreparedStatement sql=Connexion.getCon().prepareStatement("DELETE FROM annonces where id=?");
+            DBConnexion.getCon().setAutoCommit(false);
+            PreparedStatement sql= DBConnexion.getCon().prepareStatement("DELETE FROM annonces where id=?");
             sql.setInt(1,obj.getId());
             sql.executeUpdate();
-            Connexion.getCon().commit();
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().commit();
+            DBConnexion.getCon().setAutoCommit(true);
             return true;
         } catch (Exception e) {
             try {
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             } catch (SQLException ex) {
                 System.err.println(ex);
                 return  false;
@@ -163,18 +163,18 @@ public class DAOAnnonce implements IDAO<Annonce>{
     public boolean deleteMultiple(Collection<Annonce> annonces)
     {
         try {
-            Connexion.getCon().setAutoCommit(false);
+            DBConnexion.getCon().setAutoCommit(false);
             for (Annonce annonce: annonces) {
-                PreparedStatement sql=Connexion.getCon().prepareStatement("DELETE FROM annonces where id=?");
+                PreparedStatement sql= DBConnexion.getCon().prepareStatement("DELETE FROM annonces where id=?");
                 sql.setInt(1,annonce.getId());
                 sql.executeUpdate();
             }
-            Connexion.getCon().commit();
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().commit();
+            DBConnexion.getCon().setAutoCommit(true);
             return true;
         } catch (Exception e) {
             try {
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             } catch (SQLException ex) {
                 System.err.println(ex);
                 return  false;
@@ -186,7 +186,7 @@ public class DAOAnnonce implements IDAO<Annonce>{
     public boolean Create_Relation_Ann_Site(Annonce annonce,Site site)
     {
         try {
-            PreparedStatement statement=Connexion.getCon().prepareStatement("INSERT INTO annonces_con_site VALUES (?,?)");
+            PreparedStatement statement= DBConnexion.getCon().prepareStatement("INSERT INTO annonces_con_site VALUES (?,?)");
             statement.setInt(1,annonce.getId());
             statement.setInt(2,site.getId());
             statement.executeUpdate();
@@ -198,13 +198,13 @@ public class DAOAnnonce implements IDAO<Annonce>{
     }
     private void Clear_Relation_Ann_Site(Annonce annonce) throws SQLException {
 
-        PreparedStatement statement=Connexion.getCon().prepareStatement("Delete FROM annonces_con_site where id_annonce=?");
+        PreparedStatement statement= DBConnexion.getCon().prepareStatement("Delete FROM annonces_con_site where id_annonce=?");
         statement.setInt(1,annonce.getId());
         statement.executeUpdate();
     }
     public void extractSiteAnnonces(Site site) throws SQLException
     {
-        PreparedStatement statement=Connexion.getCon().prepareStatement("SELECT a.* FROM  annonces a JOIN annonces_con_site acs on a.id = acs.id_annonce  where id_site=?");
+        PreparedStatement statement= DBConnexion.getCon().prepareStatement("SELECT a.* FROM  annonces a JOIN annonces_con_site acs on a.id = acs.id_annonce  where id_site=?");
         statement.setInt(1,site.getId());
         ResultSet set=statement.executeQuery();
         while (set.next()){
@@ -213,7 +213,7 @@ public class DAOAnnonce implements IDAO<Annonce>{
     }
     public void extractSiteActiveAnnonces(Site site) throws SQLException
     {
-        PreparedStatement statement=Connexion.getCon().prepareStatement("SELECT a.* FROM  annonces a JOIN annonces_con_site acs on a.id = acs.id_annonce where id_site=? and datedebut <= CURRENT_DATE and CURRENT_DATE <= datefin ");
+        PreparedStatement statement= DBConnexion.getCon().prepareStatement("SELECT a.* FROM  annonces a JOIN annonces_con_site acs on a.id = acs.id_annonce where id_site=? and datedebut <= CURRENT_DATE and CURRENT_DATE <= datefin ");
         statement.setInt(1,site.getId());
         ResultSet set=statement.executeQuery();
         while (set.next()){
@@ -222,9 +222,9 @@ public class DAOAnnonce implements IDAO<Annonce>{
     }
     public void extractSiteActiveAnnonces_Categorie(Site site,List<Integer> catIds) throws SQLException
     {
-        PreparedStatement statement=Connexion.getCon().prepareStatement("SELECT a.* FROM  annonces a JOIN annonces_con_site acs on a.id = acs.id_annonce where id_site=? and datedebut <= CURRENT_DATE and CURRENT_DATE <= datefin and id_cat = any (?)");
+        PreparedStatement statement= DBConnexion.getCon().prepareStatement("SELECT a.* FROM  annonces a JOIN annonces_con_site acs on a.id = acs.id_annonce where id_site=? and datedebut <= CURRENT_DATE and CURRENT_DATE <= datefin and id_cat = any (?)");
         statement.setInt(1,site.getId());
-        Array array = Connexion.getCon().createArrayOf("bigint",catIds.toArray());
+        Array array = DBConnexion.getCon().createArrayOf("bigint",catIds.toArray());
         statement.setArray(2,array);
         ResultSet set=statement.executeQuery();
         while (set.next()){
@@ -234,9 +234,9 @@ public class DAOAnnonce implements IDAO<Annonce>{
 
     public void extractSiteAnnonces_Categorie(Site site,List<Integer> catIds) throws SQLException
     {
-        PreparedStatement statement=Connexion.getCon().prepareStatement("SELECT a.* FROM  annonces a JOIN annonces_con_site acs on a.id = acs.id_annonce  where id_site=? and id_cat = any (?)");
+        PreparedStatement statement= DBConnexion.getCon().prepareStatement("SELECT a.* FROM  annonces a JOIN annonces_con_site acs on a.id = acs.id_annonce  where id_site=? and id_cat = any (?)");
         statement.setInt(1,site.getId());
-        Array array = Connexion.getCon().createArrayOf("bigint",catIds.toArray());
+        Array array = DBConnexion.getCon().createArrayOf("bigint",catIds.toArray());
         statement.setArray(2,array);
         ResultSet set=statement.executeQuery();
         while (set.next()){
@@ -247,7 +247,7 @@ public class DAOAnnonce implements IDAO<Annonce>{
     public boolean checkExiste(int id) {
         try {
             PreparedStatement sql= null;
-            sql = Connexion.getCon().prepareStatement("SELECT * From annonces where id=?");
+            sql = DBConnexion.getCon().prepareStatement("SELECT * From annonces where id=?");
             sql.setInt(1,id);
             ResultSet set= sql.executeQuery();
             if(set.next())return true;
