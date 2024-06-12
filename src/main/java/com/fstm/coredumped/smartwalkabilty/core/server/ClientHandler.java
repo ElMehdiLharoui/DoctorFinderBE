@@ -11,69 +11,66 @@ import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.Socket;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable {
     private final Socket clientSocket;
     LocalDateTime d1;
     LocalDateTime d2;
 
-    public ClientHandler(Socket s){
+    public ClientHandler(Socket s) {
         this.clientSocket = s;
     }
 
     @Override
     public void run() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream())){
-            ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
+        try (
+                ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
+                ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream())
+        ) {
 
             Object req = ois.readObject();
             d1 = LocalDateTime.now();
 
-            if(req instanceof DangerReq){
-                System.out.println("["+d1+"] user requesting dangers ...");
+            if (req instanceof DangerReq) {
+                System.out.println("[" + d1 + "] user requesting dangers ...");
                 DangerReq req1 = (DangerReq) req;
                 List<Declaration> declarations = new DangerCtrl().requestDangers(req1);
                 oos.writeObject(declarations);
-            }
-
-            else if(req instanceof ShortestPathReq || req instanceof ShortestPathWithAnnounces){
-                System.out.println("["+d1+"] starting routing ...");
+            } else if (req instanceof ShortestPathReq || req instanceof ShortestPathWithAnnounces) {
+                System.out.println("[" + d1 + "] starting routing ...");
                 Routage routage;
-                if(req instanceof ShortestPathReq)
+                if (req instanceof ShortestPathReq)
                     routage = new Routage((ShortestPathReq) req);
                 else
                     routage = new Routage((ShortestPathWithAnnounces) req);
 
                 routage.calculerChemins();
                 oos.writeObject(routage.getChemins());
-            }
-
-            else if(req instanceof RequestPerimetreAnnonce){
-                System.out.println("["+d1+"] user request announces in Radius: starting geofencing ...");
+            } else if (req instanceof RequestPerimetreAnnonce) {
+                System.out.println("[" + d1 + "] user request announces in Radius: starting geofencing ...");
                 RequestPerimetreAnnonce req1 = (RequestPerimetreAnnonce) req;
                 // handle the case where the user requested just the available announces
                 // in a given Radius
-                List<Site> list = Geofencing.findAllAnnoncesByRadius(req1.getActualPoint(), req1.getPerimetre(),req1.getCategorieList());
+                List<Site> list = Geofencing.findAllAnnoncesByRadius(req1.getActualPoint(), req1.getPerimetre(), req1.getCategorieList());
                 oos.writeObject(list);
-            }
-
-            else if(req instanceof DeclareDangerReq){
-                System.out.println("["+d1+"] user request Declaring danger ...");
+            } else if (req instanceof DeclareDangerReq) {
+                System.out.println("[" + d1 + "] user request Declaring danger ...");
                 DeclareDangerReq req1 = (DeclareDangerReq) req;
                 new DangerCtrl().danger_ctrl(req1);
                 oos.writeBoolean(true);
-            }else if(req instanceof  ReserveRequest){
-                System.out.println("["+d1+"] user request Reserve ...");
+            } else if (req instanceof ReserveRequest) {
+                System.out.println("[" + d1 + "] user request Reserve ...");
                 ReserveRequest req1 = (ReserveRequest) req;
                 ResponseDTO timeOfReservation = new ReservationController().handle(req1);
                 oos.writeObject(timeOfReservation);
-            }else if(req instanceof CommentRequest){
-                System.out.println("["+d1+"] user request Comment ...");
+            } else if (req instanceof CommentRequest) {
+                System.out.println("[" + d1 + "] user request Comment ...");
                 CommentRequest commentRequest = (CommentRequest) req;
                 BasicResponse<Integer> response = new CommentsController().comment(commentRequest);
                 oos.writeObject(response);
@@ -83,13 +80,16 @@ public class ClientHandler implements Runnable{
             long d = Duration.between(d1, d2).toMillis();
 
             System.out.println(" ==== Work has finished ===");
-            System.out.println("it tooks: "+ d + " millis");
-            System.out.println("in seconds: "+ TimeUnit.MICROSECONDS.toSeconds(d) + " seconds");
+            System.out.println("it tooks: " + d + " millis");
+            System.out.println("in seconds: " + TimeUnit.MICROSECONDS.toSeconds(d) + " seconds");
 
             oos.flush();
+        } catch (StreamCorruptedException e) {
+            // Handle or ignore the invalid stream header error
+            System.err.println("Invalid stream header, ignoring: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error "+e.getMessage());
+            System.out.println("Error " + e.getMessage());
             e.printStackTrace();
-        } 
+        }
     }
 }
