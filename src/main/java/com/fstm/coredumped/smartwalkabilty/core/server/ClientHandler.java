@@ -1,6 +1,7 @@
 package com.fstm.coredumped.smartwalkabilty.core.server;
 
 import com.fstm.coredumped.smartwalkabilty.common.controller.*;
+import com.fstm.coredumped.smartwalkabilty.common.model.service.response.BasicResponse;
 import com.fstm.coredumped.smartwalkabilty.core.danger.controller.DangerCtrl;
 import com.fstm.coredumped.smartwalkabilty.core.danger.model.bo.Declaration;
 import com.fstm.coredumped.smartwalkabilty.core.geofencing.model.bo.Geofencing;
@@ -18,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ClientHandler implements Runnable{
     private final Socket clientSocket;
-    private Routage routage;
     LocalDateTime d1;
     LocalDateTime d2;
 
@@ -43,6 +43,7 @@ public class ClientHandler implements Runnable{
 
             else if(req instanceof ShortestPathReq || req instanceof ShortestPathWithAnnounces){
                 System.out.println("["+d1+"] starting routing ...");
+                Routage routage;
                 if(req instanceof ShortestPathReq)
                     routage = new Routage((ShortestPathReq) req);
                 else
@@ -69,8 +70,13 @@ public class ClientHandler implements Runnable{
             }else if(req instanceof  ReserveRequest){
                 System.out.println("["+d1+"] user request Reserve ...");
                 ReserveRequest req1 = (ReserveRequest) req;
-                ResponseDTO timeOfReservation = new Reservation_ctrl().ResevationCtrl(req1);
+                ResponseDTO timeOfReservation = new ReservationController().handle(req1);
                 oos.writeObject(timeOfReservation);
+            }else if(req instanceof CommentRequest){
+                System.out.println("["+d1+"] user request Comment ...");
+                CommentRequest commentRequest = (CommentRequest) req;
+                BasicResponse<Integer> response = new CommentsController().comment(commentRequest);
+                oos.writeObject(response);
             }
 
             d2 = LocalDateTime.now();
