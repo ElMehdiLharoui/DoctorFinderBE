@@ -1,6 +1,6 @@
 package com.fstm.coredumped.smartwalkabilty.common.controller;
 
-public class CommentRequest implements IRequest {
+public class CommentRequest extends BaseRequest {
     private double rating;
     private String comment;
     private int idSite;
