@@ -7,6 +7,7 @@ import com.fstm.coredumped.smartwalkabilty.web.Model.dao.IDAO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public class DAOComments implements IDAO<Comment> {
@@ -81,8 +82,8 @@ public class DAOComments implements IDAO<Comment> {
         return comments;
     }
 
-    public Collection<Comment> getCommentsBySiteId(int siteId) {
-        Collection<Comment> comments = new ArrayList<>();
+    public List<Comment> getCommentsBySiteId(int siteId) {
+        List<Comment> comments = new ArrayList<>();
         try {
             Connection connection = DBConnexion.getCon();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Comment WHERE idSite = ?");

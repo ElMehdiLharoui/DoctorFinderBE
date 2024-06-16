@@ -31,6 +31,10 @@
         <servlet-name>ReservationController</servlet-name>
         <servlet-class>com.fstm.coredumped.smartwalkabilty.web.Controller.ReservationController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CommentsController</servlet-name>
+        <servlet-class>com.fstm.coredumped.smartwalkabilty.web.Controller.CommentsController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CategorieController</servlet-name>
         <url-pattern>/categories</url-pattern>
@@ -63,6 +67,11 @@
         <servlet-name>RegistrationController</servlet-name>
         <url-pattern>/register</url-pattern>
         <url-pattern>/register/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CommentsController</servlet-name>
+        <url-pattern>/comments</url-pattern>
+        <url-pattern>/comments/*</url-pattern>
     </servlet-mapping>
     <filter>
         <filter-name>CorsFilter</filter-name>

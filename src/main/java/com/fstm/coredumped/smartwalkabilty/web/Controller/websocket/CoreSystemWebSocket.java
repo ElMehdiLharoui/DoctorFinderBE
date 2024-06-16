@@ -67,7 +67,6 @@ public class CoreSystemWebSocket {
         System.err.println("WebSocket error on session " + session.getId() + ": " + throwable.getMessage());
     }
 
-    // Helper method to parse the request based on type
     private Object parseRequest(JsonObject jsonObject, String type) {
         return switch (type) {
             case "DangerReq" -> gson.fromJson(jsonObject, DangerReq.class);
@@ -77,6 +76,7 @@ public class CoreSystemWebSocket {
             case "DeclareDangerReq" -> gson.fromJson(jsonObject, DeclareDangerReq.class);
             case "ReserveRequest" -> gson.fromJson(jsonObject, ReserveRequest.class);
             case "CommentRequest" -> gson.fromJson(jsonObject, CommentRequest.class);
+            case "GetCommentsRequest" -> gson.fromJson(jsonObject, GetCommentsRequest.class);
             default -> null;  // Unknown type
         };
     }

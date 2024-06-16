@@ -23,4 +23,28 @@ public class BasicResponse<T> implements Serializable {
     public static <T> BasicResponse<T> fail(String message) {
         return new BasicResponse<>(null, message, false);
     }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 }
