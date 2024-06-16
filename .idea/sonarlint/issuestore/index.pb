@@ -11,15 +11,11 @@ Psrc/main/java/com/fstm/coredumped/smartwalkabilty/web/Model/Service/MD5Hash.jav
 Tsrc/main/java/com/fstm/coredumped/smartwalkabilty/web/Model/dao/DAOOrganisation.java,1\5\152d68ef260574c9c9203e722eba656a151f9631
 €
 Psrc/main/java/com/fstm/coredumped/smartwalkabilty/web/Model/dao/DBConnexion.java,7\9\79c7dddaa5ffde7c2016da28d3cbb3a3b8b9bac4
-‰
-Ysrc/main/java/com/fstm/coredumped/smartwalkabilty/common/controller/DeclareDangerReq.java,b\d\bd1ab79b2cad3079b3b8470871dd68c8358ee8ff
 ‡
 Wsrc/main/java/com/fstm/coredumped/smartwalkabilty/common/controller/ReserveRequest.java,d\8\d8cbe9b835f37ef5bc6fcb851e85def71d189610
 ˆ
 Xsrc/main/java/com/fstm/coredumped/smartwalkabilty/core/danger/controller/DangerCtrl.java,0\2\02097c41e8d103b07c85dab45d58ee464af283dd
 †
 Vsrc/main/java/com/fstm/coredumped/smartwalkabilty/web/Controller/DTOS/ResponseDTO.java,8\3\838f7e888e341b9a30ca00fc004b9456f95a5c24
-‚
-Rsrc/main/java/com/fstm/coredumped/smartwalkabilty/common/controller/DangerReq.java,3\5\3505030184102ede27ee89eb438e6111264012c0
 š
 jsrc/main/java/com/fstm/coredumped/smartwalkabilty/web/Controller/websocket/SiteTimeAvailableWebSocket.java,e\5\e5f6982411ea4c6337d4730b18bffce7c4ddda29
