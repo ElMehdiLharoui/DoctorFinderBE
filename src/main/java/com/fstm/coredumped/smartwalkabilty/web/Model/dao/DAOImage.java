@@ -23,7 +23,7 @@ public class DAOImage implements IDAO<Image>{
     @Override
     public boolean Create(Image obj) {
         try {
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("INSERT INTO Images (urlimage,id_Annonce) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement("INSERT INTO Images (urlimage,id_Annonce) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, obj.getUrlImage());
             preparedStatement.setInt(2, obj.getAnnonce().getId());
             preparedStatement.executeUpdate();
@@ -53,7 +53,7 @@ public class DAOImage implements IDAO<Image>{
     }
     public List<Image> findImagesByAnnonce(Annonce annonce) throws SQLException {
         List<Image> images=new ArrayList<Image>();
-        PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("SELECT * from Images where id_annonce=?");
+        PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement("SELECT * from Images where id_annonce=?");
         preparedStatement.setInt(1, annonce.getId());
         ResultSet set= preparedStatement.executeQuery();
         while (set.next()){
@@ -72,7 +72,7 @@ public class DAOImage implements IDAO<Image>{
     }
     public void clearImages(Annonce annonce) throws SQLException
     {
-        PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("DELETE from Images where id_annonce=?");
+        PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement("DELETE from Images where id_annonce=?");
         preparedStatement.setInt(1, annonce.getId());
         preparedStatement.executeUpdate();
     }

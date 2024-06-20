@@ -2,9 +2,10 @@ package com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS;
 
 import com.fstm.coredumped.smartwalkabilty.web.Model.bo.Site;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ResepenseDTO {
+public class ResponseDTO implements Serializable {
     private int id;
     private Date date;
     private String tempDeReservation;

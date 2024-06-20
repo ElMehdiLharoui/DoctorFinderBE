@@ -41,7 +41,7 @@ public class DAOGraph implements IDAOGraph {
         String geom = "the_geom";
         try
         {
-            Connection c = Connexion.getConnection();
+            Connection c = OSMDBConnexion.getConnection();
             PreparedStatement preparedStatement = c.prepareStatement("select gid as id, source, target, length_m, x1, y1, x2, y2 FROM ways WHERE st_contains((\n" +
                     "SELECT ST_BUFFER (\n" +
                     "\tST_SetSRID(ST_Point(?, ?),?)\n" +

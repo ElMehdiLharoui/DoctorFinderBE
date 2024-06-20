@@ -9,8 +9,5 @@
         <module name="SMART_WALK" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="SMART_WALK" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

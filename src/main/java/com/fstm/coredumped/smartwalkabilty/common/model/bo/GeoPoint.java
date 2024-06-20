@@ -6,8 +6,9 @@ import java.util.Objects;
 import static java.lang.Math.*;
 
 public class GeoPoint implements Serializable {
-    private static final long serialVersionUID=15L;
-    private static int num=0;
+    private static final long serialVersionUID = 15L;
+    private static int num = 0;
+
     public GeoPoint() {
 
     }
@@ -15,7 +16,7 @@ public class GeoPoint implements Serializable {
     public GeoPoint(double laltittude, double longtitude) {
         this.laltittude = laltittude;
         this.longtitude = longtitude;
-        id=++num;
+        id = ++num;
     }
 
     public GeoPoint(int id, double laltittude, double longtitude) {
@@ -57,17 +58,18 @@ public class GeoPoint implements Serializable {
         GeoPoint geoPoint = (GeoPoint) o;
         return Double.compare(geoPoint.laltittude, laltittude) == 0 && Double.compare(geoPoint.longtitude, longtitude) == 0;
     }
+
     @Override
     public String toString() {
-        return "["+this.laltittude+","+this.longtitude+"]";
+        return "[" + this.laltittude + "," + this.longtitude + "]";
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(laltittude, longtitude);
     }
-    public double distanceToInMeters(GeoPoint geoPoint)
-    {
+
+    public double distanceToInMeters(GeoPoint geoPoint) {
         double R = 6371;//EarthRadios
         double lat1 = toRadians(laltittude);
         double long1 = toRadians(longtitude);
@@ -77,11 +79,11 @@ public class GeoPoint implements Serializable {
         double dlat = lat2 - lat1;
         double ans = pow(sin(dlat / 2), 2) + cos(lat1) * cos(lat2) * pow(sin(dlong / 2), 2);
         ans = 2 * asin(sqrt(ans));
-        ans*=1000*R;
+        ans *= 1000 * R;
         return ans;
     }
-    public static double toRadians(double ree)
-    {
+
+    public static double toRadians(double ree) {
         double one_deg = (Math.PI) / 180;
         return (one_deg * ree);
     }

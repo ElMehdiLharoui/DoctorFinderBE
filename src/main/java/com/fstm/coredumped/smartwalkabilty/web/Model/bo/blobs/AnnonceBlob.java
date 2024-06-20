@@ -22,8 +22,7 @@ public class AnnonceBlob {
     public boolean verifyInfos() {
         if ( Description == null || url == null || Token == null|| id_cat==0 || sites == null )
             return false;
-        if (sites.length == 0) return false;
-        return true;
+        return sites.length != 0;
     }
 
     public int getId() {

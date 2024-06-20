@@ -3,7 +3,7 @@ package com.fstm.coredumped.smartwalkabilty.web.Controller;
 import com.fstm.coredumped.smartwalkabilty.common.controller.ReserveRequest;
 import com.fstm.coredumped.smartwalkabilty.common.model.service.ReservationService;
 import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.GetReservationsBySiteDTO;
-import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.ResepenseDTO;
+import com.fstm.coredumped.smartwalkabilty.web.Controller.DTOS.ResponseDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -15,12 +15,13 @@ import java.io.IOException;
 
 
 public class ReservationController extends HttpServlet {
-    ReservationService reservationService = new ReservationService();
+    public static final String APPLICATION_JSON = "application/json";
+    private final ReservationService reservationService = new ReservationService();
     static final Gson gson = new GsonBuilder().setDateFormat("MMM dd, yyyy HH:mm:ss").create();
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setContentType(APPLICATION_JSON);
 
         try {
             GetReservationsBySiteDTO DTO= gson.fromJson(request.getReader(), GetReservationsBySiteDTO.class);
@@ -45,8 +46,8 @@ public class ReservationController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json");
-        ResepenseDTO s1=new ResepenseDTO();
+        resp.setContentType(APPLICATION_JSON);
+        ResponseDTO s1=new ResponseDTO();
         try {
             ReserveRequest reserveRequest = gson.fromJson(req.getReader(), ReserveRequest.class);
             if(!reserveRequest.verifyEverythingIsNotNull()){
@@ -67,7 +68,7 @@ public class ReservationController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        resp.setContentType("application/json");
+        resp.setContentType(APPLICATION_JSON);
         String s1 = null;
         try {
             GetReservationsBySiteDTO Blob = gson.fromJson(req.getReader(), GetReservationsBySiteDTO.class);
@@ -81,7 +82,7 @@ public class ReservationController extends HttpServlet {
             if(s1.contains("invalid"))resp.setStatus(400);
             resp.getWriter().println(s1);
         }catch (Exception e){
-            System.err.println(e);
+            e.printStackTrace();
             resp.setStatus(400);
             resp.getWriter().println("{ \"mes\":\"  Exception Happened \" }");
         }

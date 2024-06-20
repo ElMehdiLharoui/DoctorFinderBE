@@ -27,13 +27,13 @@ public class DAOOrganisation implements IDAO<Organisation> {
     @Override
     public boolean Create(Organisation organisation) {
         try {
-            PreparedStatement pr=Connexion.getCon().prepareStatement(
+            PreparedStatement pr= DBConnexion.getCon().prepareStatement(
                     "insert into organizations(name,login,passHash,email,type) values(?,?,?,?,?) "
             );
            // pr.setDate(1,new java.sql.Date(organisation.getDateCreation().getTime()));
             pr.setString(1,organisation.getNom());
             pr.setString(2,organisation.getLogin());
-            pr.setString(3, MD5Hash.MD5Hash(organisation.getPassword()));
+            pr.setString(3, MD5Hash.md5Hash(organisation.getPassword()));
             pr.setString(4,organisation.getEmail());
             pr.setInt(5,organisation.getType());
 
@@ -52,7 +52,7 @@ public class DAOOrganisation implements IDAO<Organisation> {
     }
     public int getGeneratedId(String login) {
         try {
-            PreparedStatement pr = Connexion.getCon().prepareStatement(
+            PreparedStatement pr = DBConnexion.getCon().prepareStatement(
                     "SELECT id FROM organizations WHERE login=? ORDER BY id DESC LIMIT 1"
             );
             pr.setString(1, login); // Utilisez le login pour récupérer l'ID
@@ -72,7 +72,7 @@ public class DAOOrganisation implements IDAO<Organisation> {
     public Collection<Organisation> Retrieve() {
         List<Organisation> organisations=new LinkedList<Organisation>();
         try {
-            PreparedStatement pr=Connexion.getCon().prepareStatement("select * from organizations");
+            PreparedStatement pr= DBConnexion.getCon().prepareStatement("select * from organizations");
             ResultSet resultSet=pr.executeQuery();
             while (resultSet.next())
             {
@@ -88,7 +88,7 @@ public class DAOOrganisation implements IDAO<Organisation> {
     @Override
     public void update(Organisation organisation) {
         try {
-            PreparedStatement pr=Connexion.getCon().prepareStatement(
+            PreparedStatement pr= DBConnexion.getCon().prepareStatement(
                     "Update organizations SET login=?,passHash=?,email=?,name=? where id=? "
             );
             pr.setString(1,organisation.getLogin());
@@ -106,7 +106,7 @@ public class DAOOrganisation implements IDAO<Organisation> {
     @Override
     public boolean delete(Organisation organisation) {
         try {
-            PreparedStatement pr=Connexion.getCon().prepareStatement("Delete FROM organizations where id=?");
+            PreparedStatement pr= DBConnexion.getCon().prepareStatement("Delete FROM organizations where id=?");
             pr.setInt(1,organisation.getId());
             pr.executeUpdate();
             return true;
@@ -133,8 +133,8 @@ public class DAOOrganisation implements IDAO<Organisation> {
 
     public Organisation findOrganisationById(int id){
         try {
-            Connexion.getCon().setAutoCommit(false);
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement(
+            DBConnexion.getCon().setAutoCommit(false);
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement(
                     "SELECT * FROM organizations WHERE id=?");
             preparedStatement.setInt(1,id);
             ResultSet set = preparedStatement.executeQuery();
@@ -154,7 +154,7 @@ public class DAOOrganisation implements IDAO<Organisation> {
 
     public boolean isLoginExist(String login){
         try {
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement(
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement(
                     "SELECT * FROM organizations WHERE login=? ");
             preparedStatement.setString(1,login);
             ResultSet set = preparedStatement.executeQuery();
@@ -171,7 +171,7 @@ public class DAOOrganisation implements IDAO<Organisation> {
 
     public boolean isEmailExist(String email){
         try {
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement(
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement(
                     "SELECT * FROM organizations WHERE email=? ");
             preparedStatement.setString(1,email);
             ResultSet set = preparedStatement.executeQuery();
@@ -188,7 +188,7 @@ public class DAOOrganisation implements IDAO<Organisation> {
 
     public Organisation authentification(String login, String HashedPassword){
         try {
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement(
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement(
                     "SELECT * FROM organizations WHERE login=? AND passhash=? ");
             preparedStatement.setString(1,login);
             preparedStatement.setString(2, HashedPassword);

@@ -1,7 +1,7 @@
 package com.fstm.coredumped.smartwalkabilty.common.model.dao;
 
 import com.fstm.coredumped.smartwalkabilty.common.model.bo.Reservation;
-import com.fstm.coredumped.smartwalkabilty.web.Model.dao.Connexion;
+import com.fstm.coredumped.smartwalkabilty.web.Model.dao.DBConnexion;
 import com.fstm.coredumped.smartwalkabilty.web.Model.dao.IDAO;
 
 import java.sql.*;
@@ -23,8 +23,8 @@ public class DAOReservation implements IDAO<Reservation> {
     @Override
     public boolean Create(Reservation obj) {
         try {
-            Connexion.getCon().setAutoCommit(false);
-            PreparedStatement preparedStatement = Connexion.getCon().prepareStatement(
+            DBConnexion.getCon().setAutoCommit(false);
+            PreparedStatement preparedStatement = DBConnexion.getCon().prepareStatement(
                     "INSERT INTO Reservation (date, tempDeReservation, createdAt, CIN, lName, fName, status, montant, NumberInLine, idSite,telephone_number) " +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
                     Statement.RETURN_GENERATED_KEYS
@@ -38,12 +38,12 @@ public class DAOReservation implements IDAO<Reservation> {
                 obj.setId(set.getInt(1));
             }
 
-            Connexion.getCon().commit();
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().commit();
+            DBConnexion.getCon().setAutoCommit(true);
             return true;
         } catch (SQLException e) {
             try {
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             } catch (SQLException ex) {
                 ex.printStackTrace();
                return false;
@@ -57,7 +57,7 @@ public class DAOReservation implements IDAO<Reservation> {
     {
         Reservation reservation = null;
         try {
-            Connection connection = Connexion.getCon();
+            Connection connection = DBConnexion.getCon();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM reservation WHERE idSite = ? and cin = ? and date = ?");
             preparedStatement.setInt(1, siteId);
             preparedStatement.setString(2, cin);
@@ -97,7 +97,7 @@ public class DAOReservation implements IDAO<Reservation> {
     public int countReservationsByDateAndSite(Date date, int idSite) {
         int count = 0;
         try {
-            Connection connection = Connexion.getCon();
+            Connection connection = DBConnexion.getCon();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(*) FROM reservation WHERE date = ? and idSite = ?");
             preparedStatement.setDate(1, new java.sql.Date(date.getTime())); // Conversion nécessaire ici
             preparedStatement.setInt(2, idSite);
@@ -119,7 +119,7 @@ public class DAOReservation implements IDAO<Reservation> {
         Collection<Reservation> reservations = new ArrayList<>();
         Reservation reservation = null;
         try {
-            Connection connection = Connexion.getCon();
+            Connection connection = DBConnexion.getCon();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM reservation WHERE idSite = ?");
             preparedStatement.setInt(1, siteId);
 
@@ -165,7 +165,7 @@ public class DAOReservation implements IDAO<Reservation> {
 
     public boolean updateMontant(int reservationId, float newMontant) {
         try {
-            Connection connection = Connexion.getCon();
+            Connection connection = DBConnexion.getCon();
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE reservation SET montant = ? and status = ? WHERE id = ?");
             preparedStatement.setFloat(1, newMontant);
             preparedStatement.setInt(3, reservationId);
@@ -184,7 +184,7 @@ public class DAOReservation implements IDAO<Reservation> {
     @Override
     public boolean delete(Reservation obj) {
         try {
-            Connection connection = Connexion.getCon();
+            Connection connection = DBConnexion.getCon();
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM reservation WHERE id = ?");
             preparedStatement.setInt(1, obj.getId());
 

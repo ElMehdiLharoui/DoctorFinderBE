@@ -13,25 +13,23 @@ import java.io.IOException;
 
 public class SiteController extends HttpServlet {
 
-    SiteService service=new SiteService();
+    public static final String APPLICATION_JSON = "application/json";
+    private final SiteService service = new SiteService();
+
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setContentType(APPLICATION_JSON);
         Gson s = new Gson();
         try {
-            IdsSiteBlob Blob=s.fromJson(request.getReader(), IdsSiteBlob.class);
-            if(Blob == null) {
+            IdsSiteBlob Blob = s.fromJson(request.getReader(), IdsSiteBlob.class);
+            if (Blob == null) {
                 super.doOptions(request, response);
-            }
-            else
-            {
-                String s1=service.getServ(Blob);
-                if(s1.contains("invalid"))response.setStatus(400);
+            } else {
+                String s1 = service.getServ(Blob);
+                if (s1.contains("invalid")) response.setStatus(400);
                 response.getWriter().println(s1);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.err.println(e);
             response.setStatus(400);
             response.getWriter().println("{ \"mes\":\"  Exception Happened \" }");
@@ -41,12 +39,12 @@ public class SiteController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
+        resp.setContentType(APPLICATION_JSON);
         Gson s = new Gson();
         try {
             SiteBlob Blob = s.fromJson(req.getReader(), SiteBlob.class);
-            String s1=service.createSite(Blob);
-            if(s1.contains("invalid"))resp.setStatus(400);
+            String s1 = service.createSite(Blob);
+            if (s1.contains("invalid")) resp.setStatus(400);
             resp.getWriter().println(s1);
         } catch (Exception e) {
             System.err.println(e);
@@ -54,17 +52,17 @@ public class SiteController extends HttpServlet {
             resp.getWriter().println("{ \"mes\":\"  Exception Happened \" }");
         }
     }
+
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-    {
-        resp.setContentType("application/json");
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType(APPLICATION_JSON);
         Gson s = new Gson();
         try {
             SiteBlob Blob = s.fromJson(req.getReader(), SiteBlob.class);
-            String s1=service.updateSite(Blob);
-            if(s1.contains("invalid"))resp.setStatus(400);
+            String s1 = service.updateSite(Blob);
+            if (s1.contains("invalid")) resp.setStatus(400);
             resp.getWriter().println(s1);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e);
             resp.setStatus(400);
             resp.getWriter().println("{ \"mes\":\"  Exception Happened \" }");
@@ -73,17 +71,15 @@ public class SiteController extends HttpServlet {
 
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-    {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            resp.setContentType("application/json");
+            resp.setContentType(APPLICATION_JSON);
             Gson s = new Gson();
             IdsSiteBlob Blob = s.fromJson(req.getReader(), IdsSiteBlob.class);
-            String s1=service.deleteSite(Blob);
-            if(s1.contains("invalid"))resp.setStatus(400);
+            String s1 = service.deleteSite(Blob);
+            if (s1.contains("invalid")) resp.setStatus(400);
             resp.getWriter().println(s1);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e);
             resp.setStatus(400);
             resp.getWriter().println("{ \"mes\":\"  Exception Happened \" }");

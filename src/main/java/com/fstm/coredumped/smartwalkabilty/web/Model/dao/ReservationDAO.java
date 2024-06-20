@@ -31,16 +31,16 @@ public class ReservationDAO implements IDAO<Reservation>{
     public void update(Reservation obj)
     {
         try {
-            Connexion.getCon().setAutoCommit(false);
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("UPDATE  reservation SET status=? where id=?");
+            DBConnexion.getCon().setAutoCommit(false);
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement("UPDATE  reservation SET status=? where id=?");
             preparedStatement.setString(1,obj.getStatus());
             preparedStatement.setInt(2,obj.getId());
             preparedStatement.executeUpdate();
-            Connexion.getCon().commit();
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().commit();
+            DBConnexion.getCon().setAutoCommit(true);
         }catch (SQLException e){
             try {
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             } catch (SQLException ex) {
                 System.err.println(ex);
             }
@@ -51,16 +51,16 @@ public class ReservationDAO implements IDAO<Reservation>{
     public void updateMontant(Reservation obj)
     {
         try {
-            Connexion.getCon().setAutoCommit(false);
-            PreparedStatement preparedStatement= Connexion.getCon().prepareStatement("UPDATE  reservation SET montant=? where id=?");
+            DBConnexion.getCon().setAutoCommit(false);
+            PreparedStatement preparedStatement= DBConnexion.getCon().prepareStatement("UPDATE  reservation SET montant=? where id=?");
             preparedStatement.setFloat(1,obj.getMontant());
             preparedStatement.setInt(2,obj.getId());
             preparedStatement.executeUpdate();
-            Connexion.getCon().commit();
-            Connexion.getCon().setAutoCommit(true);
+            DBConnexion.getCon().commit();
+            DBConnexion.getCon().setAutoCommit(true);
         }catch (SQLException e){
             try {
-                Connexion.getCon().rollback();
+                DBConnexion.getCon().rollback();
             } catch (SQLException ex) {
                 System.err.println(ex);
             }
@@ -76,7 +76,7 @@ public class ReservationDAO implements IDAO<Reservation>{
         List<Reservation> reservations = new ArrayList<>();
         Reservation reservation = null;
         try {
-            Connection connection = Connexion.getCon();
+            Connection connection = DBConnexion.getCon();
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "SELECT * FROM reservation WHERE idSite = ?  AND date = ?");
             preparedStatement.setInt(1, siteId);
@@ -115,7 +115,7 @@ public class ReservationDAO implements IDAO<Reservation>{
     public boolean checkExiste(int id) {
         try {
             PreparedStatement sql= null;
-            sql = Connexion.getCon().prepareStatement("SELECT * From reservation where id=?");
+            sql = DBConnexion.getCon().prepareStatement("SELECT * From reservation where id=?");
             sql.setInt(1,id);
             ResultSet set= sql.executeQuery();
             if(set.next())return true;
@@ -130,7 +130,7 @@ public class ReservationDAO implements IDAO<Reservation>{
         Reservation reservation = null;
         try{
             PreparedStatement sql =null;
-            sql= Connexion.getCon().prepareStatement("select numberinline, tempdereservation FROM reservation where idsite = ? ");
+            sql= DBConnexion.getCon().prepareStatement("select numberinline, tempdereservation FROM reservation where idsite = ? ");
             sql.setInt(1,idSite);
             ResultSet resultSet = sql.executeQuery();
             while (resultSet.next()) {

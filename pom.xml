@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.fstm.coredumped.smartwalkabilty.Web</groupId>
-    <artifactId>SMART_WALK</artifactId>
+    <artifactId>DOCTER_FINDER</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>SMART_WALK</name>
+    <name>DOCTER_FINDER</name>
     <packaging>war</packaging>
 
     <properties>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>3.18.3</version>
+            <version>4.4.0</version>
         </dependency>
         <dependency>
             <groupId>javax.enterprise</groupId>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.3</version>
+            <version>42.7.3</version>
         </dependency>
 
         <dependency>
@@ -75,20 +75,61 @@
             <artifactId>tomcat-embed-websocket</artifactId>
             <version>7.0.52</version>
         </dependency>
-        <dependency>
-            <groupId>com.fstm.coredumped.smartwalkabilty.Web</groupId>
-            <artifactId>SMART_WALK</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
+            <!-- WAR Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+                <executions>
+                    <execution>
+                        <id>default-war</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>war</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- JAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>jar</classifier>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>true</addClasspath>
+                                    <classpathPrefix>lib/</classpathPrefix>
+                                    <mainClass>com.fstm.coredumped.smartwalkabilty.core.server.Server</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

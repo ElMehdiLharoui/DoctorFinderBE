@@ -2,8 +2,7 @@ package com.fstm.coredumped.smartwalkabilty.common.controller;
 
 import java.util.Date;
 
-public class ReserveRequest implements IRequest
-{
+public class ReserveRequest extends BaseRequest {
 
     private int idSite;
     private String cin;
