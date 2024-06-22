@@ -10,28 +10,20 @@ public class Comment {
     private String comment;
     private int idSite;
     private String idUser;
+    private String displayName;
     private Site site;
     private Date createdAt = new Date();
 
     public Comment() {
     }
 
-    public Comment(double rating, String comment, int idSite, String idUser) {
+    public Comment(double rating, String comment, int idSite, String idUser, String displayName) {
         this.rating = rating;
         this.comment = comment;
         this.idSite = idSite;
         this.idUser = idUser;
+        this.displayName = displayName;
     }
-
-    public Comment(int id, double rating, String comment, int idSite, String idUser, Site site) {
-        this.id = id;
-        this.rating = rating;
-        this.comment = comment;
-        this.idSite = idSite;
-        this.idUser = idUser;
-        this.site = site;
-    }
-
     public int getId() {
         return id;
     }
@@ -86,5 +78,13 @@ public class Comment {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

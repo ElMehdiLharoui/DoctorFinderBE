@@ -5,7 +5,8 @@ public class CommentRequest extends BaseRequest {
     private String comment;
     private int idSite;
     private String idUser;
-    
+    private String displayName;
+
     public double getRating() {
         return rating;
     }
@@ -36,5 +37,13 @@ public class CommentRequest extends BaseRequest {
 
     public void setIdUser(String idUser) {
         this.idUser = idUser;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

@@ -27,7 +27,7 @@ public class DAOComments implements IDAO<Comment> {
             Connection connection = DBConnexion.getCon();
             connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO Comment (rating, comment, idSite, idUser, createdAt) VALUES (?, ?, ?, ?, ?)",
+                    "INSERT INTO Comment (rating, comment, idSite, idUser,displayName, createdAt) VALUES (?, ?, ?, ?,?, ?)",
                     Statement.RETURN_GENERATED_KEYS
             );
 
@@ -58,7 +58,8 @@ public class DAOComments implements IDAO<Comment> {
         preparedStatement.setString(2, comment.getComment());
         preparedStatement.setInt(3, comment.getIdSite());
         preparedStatement.setString(4, comment.getIdUser());
-        preparedStatement.setTimestamp(5, new Timestamp(comment.getCreatedAt().getTime()));
+        preparedStatement.setString(5, comment.getDisplayName());
+        preparedStatement.setTimestamp(6, new Timestamp(comment.getCreatedAt().getTime()));
     }
 
     @Override
@@ -66,16 +67,15 @@ public class DAOComments implements IDAO<Comment> {
         Collection<Comment> comments = new ArrayList<>();
         try {
             Connection connection = DBConnexion.getCon();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Comment");
+            try (Statement statement = connection.createStatement()) {
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM Comment");
 
-            while (resultSet.next()) {
-                Comment comment = extractComment(resultSet);
-                comments.add(comment);
+                while (resultSet.next()) {
+                    Comment comment = extractComment(resultSet);
+                    comments.add(comment);
+                }
+                resultSet.close();
             }
-
-            resultSet.close();
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,17 +86,17 @@ public class DAOComments implements IDAO<Comment> {
         List<Comment> comments = new ArrayList<>();
         try {
             Connection connection = DBConnexion.getCon();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Comment WHERE idSite = ?");
-            preparedStatement.setInt(1, siteId);
+            try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Comment WHERE idSite = ?")) {
+                preparedStatement.setInt(1, siteId);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Comment comment = extractComment(resultSet);
-                comments.add(comment);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    Comment comment = extractComment(resultSet);
+                    comments.add(comment);
+                }
+
+                resultSet.close();
             }
-
-            resultSet.close();
-            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -108,11 +108,11 @@ public class DAOComments implements IDAO<Comment> {
         try {
             Connection connection = DBConnexion.getCon();
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "UPDATE Comment SET rating = ?, comment = ?, idSite = ?, idUser = ?, createdAt = ? WHERE id = ?"
+                    "UPDATE Comment SET rating = ?, comment = ?, idSite = ?, idUser = ?, displayName = ? , createdAt = ? WHERE id = ?"
             );
 
             fillStatementRequest(obj, preparedStatement);
-            preparedStatement.setInt(6, obj.getId());
+            preparedStatement.setInt(7, obj.getId());
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -145,6 +145,7 @@ public class DAOComments implements IDAO<Comment> {
         comment.setComment(resultSet.getString("comment"));
         comment.setIdSite(resultSet.getInt("idSite"));
         comment.setIdUser(resultSet.getString("idUser"));
+        comment.setDisplayName(resultSet.getString("displayName"));
         comment.setCreatedAt(resultSet.getTimestamp("createdAt"));
         return comment;
     }

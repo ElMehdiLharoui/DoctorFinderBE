@@ -13,7 +13,7 @@ public class CommentsController {
 
     public BasicResponse<Integer> comment(CommentRequest commentRequest) {
         try {
-            return service.comment(commentRequest.getComment(), commentRequest.getRating(), commentRequest.getIdSite(), commentRequest.getIdUser());
+            return service.comment(commentRequest.getComment(), commentRequest.getRating(), commentRequest.getIdSite(), commentRequest.getIdUser(), commentRequest.getDisplayName());
         } catch (Exception e) {
             e.printStackTrace();
             return BasicResponse.fail(e.getMessage());

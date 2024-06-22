@@ -16,7 +16,7 @@ public class CommentsService {
         dao = DAOComments.getDAOComment();
     }
 
-    public BasicResponse<Integer> comment(String commentStr, double rating, int idSite, String idUser) {
+    public BasicResponse<Integer> comment(String commentStr, double rating, int idSite, String idUser, String displayName) {
         if (rating > 5 || rating <= 0) {
             return BasicResponse.fail("Rating must be between 0 and 5");
         }
@@ -26,7 +26,7 @@ public class CommentsService {
             return BasicResponse.fail("Comment already exists");
         }
 
-        Comment comment = new Comment(rating, commentStr, idSite, idUser);
+        Comment comment = new Comment(rating, commentStr, idSite, idUser, displayName);
         if (dao.Create(comment))
             return BasicResponse.success(comment.getId());
 
